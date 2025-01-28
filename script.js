@@ -29,7 +29,9 @@ const translations = {
         weddingVenue: "Restaurant Verde",
         saturday: "Saturday, May 31st 2025",
         showMap: "Show Map",
-        hideMap: "Hide Map"
+        hideMap: "Hide Map",
+        addToGoogleCalendar: "Add to Google Calendar",
+        addToIphoneCalendar: "Add to iPhone Calendar"
     },
     sr: {
         preTitle: "Venčanje",
@@ -59,7 +61,9 @@ const translations = {
         weddingVenue: "Restoran Verde",
         saturday: "Subota, 31. Maj 2025",
         showMap: "Prikaži mapu",
-        hideMap: "Sakrij mapu"
+        hideMap: "Sakrij mapu",
+        addToGoogleCalendar: "Dodaj u Google Kalendar",
+        addToIphoneCalendar: "Dodaj u iPhone Kalendar"
     }
 };
 
@@ -140,6 +144,16 @@ function setLanguage(lang) {
         btn.textContent = btn.getAttribute('aria-expanded') === 'true' 
             ? translations[lang].hideMap 
             : translations[lang].showMap;
+    });
+
+    // Update calendar button texts
+    document.querySelectorAll('.calendar-btn').forEach(btn => {
+        const textSpan = btn.querySelector('.calendar-text');
+        if (btn.dataset.calendar === 'google') {
+            textSpan.textContent = translations[lang].addToGoogleCalendar;
+        } else if (btn.dataset.calendar === 'ical') {
+            textSpan.textContent = translations[lang].addToIphoneCalendar;
+        }
     });
 }
 
@@ -358,4 +372,70 @@ function initMapToggles() {
 document.addEventListener('DOMContentLoaded', () => {
     // ... existing code ...
     initMapToggles();
+});
+
+function generateCalendarEvent() {
+    const event = {
+        title: 'Wedding of Jovanka & Mladen',
+        description: 'Wedding Ceremony and Celebration\n\n' +
+                    '14:15 - Church Ceremony at St. Prince Lazar Church - Lazarica\n' +
+                    '16:00 - Guest Gathering at Restoran Verde\n' +
+                    '17:00 - Wedding Celebration at Restoran Verde',
+        location: 'St. Prince Lazar Church - Lazarica, Belgrade, Serbia',
+        startDate: '2025-05-31T14:15:00',
+        endDate: '2025-05-31T23:59:00'
+    };
+
+    return event;
+}
+
+function addToGoogleCalendar(event) {
+    const baseUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+    const dates = `${event.startDate}/${event.endDate}`.replace(/[-:]/g, '');
+    
+    const params = new URLSearchParams({
+        text: event.title,
+        details: event.description,
+        location: event.location,
+        dates: dates
+    });
+
+    window.open(`${baseUrl}&${params.toString()}`, '_blank');
+}
+
+function generateICSFile(event) {
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${event.startDate.replace(/[-:]/g, '')}
+DTEND:${event.endDate.replace(/[-:]/g, '')}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description.replace(/\n/g, '\\n')}
+LOCATION:${event.location}
+END:VEVENT
+END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'wedding_jovanka_mladen.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing DOMContentLoaded code ...
+
+    // Add calendar button handlers
+    document.querySelectorAll('.calendar-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const event = generateCalendarEvent();
+            if (button.dataset.calendar === 'google') {
+                addToGoogleCalendar(event);
+            } else if (button.dataset.calendar === 'ical') {
+                generateICSFile(event);
+            }
+        });
+    });
 });
