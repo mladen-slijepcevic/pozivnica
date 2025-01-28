@@ -27,7 +27,9 @@ const translations = {
         churchVenue: "St. Prince Lazar Church - Lazarica",
         gatheringVenue: "Restaurant Verde",
         weddingVenue: "Restaurant Verde",
-        saturday: "Saturday, May 31st 2025"
+        saturday: "Saturday, May 31st 2025",
+        showMap: "Show Map",
+        hideMap: "Hide Map"
     },
     sr: {
         preTitle: "Venčanje",
@@ -55,7 +57,9 @@ const translations = {
         churchVenue: "Crkva svetog Kneza Lazara - Lazarica",
         gatheringVenue: "Restoran Verde",
         weddingVenue: "Restoran Verde",
-        saturday: "Subota, 31. Maj 2025"
+        saturday: "Subota, 31. Maj 2025",
+        showMap: "Prikaži mapu",
+        hideMap: "Sakrij mapu"
     }
 };
 
@@ -130,6 +134,13 @@ function setLanguage(lang) {
 
     // Update wedding date in details section
     document.querySelector('.wedding-date').textContent = translations[lang].saturday;
+
+    // Update map toggle buttons
+    document.querySelectorAll('.map-toggle').forEach(btn => {
+        btn.textContent = btn.getAttribute('aria-expanded') === 'true' 
+            ? translations[lang].hideMap 
+            : translations[lang].showMap;
+    });
 }
 
 // Set initial language based on stored preference or default to Serbian
@@ -325,3 +336,26 @@ function initGallery() {
 
 // Initialize gallery when the page loads
 document.addEventListener('DOMContentLoaded', initGallery);
+
+function initMapToggles() {
+    document.querySelectorAll('.map-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+            const mapContainer = button.nextElementSibling;
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            
+            button.setAttribute('aria-expanded', !isExpanded);
+            button.textContent = !isExpanded 
+                ? translations[localStorage.getItem('preferredLanguage') || 'sr'].hideMap 
+                : translations[localStorage.getItem('preferredLanguage') || 'sr'].showMap;
+            
+            mapContainer.classList.toggle('show');
+            mapContainer.hidden = isExpanded;
+        });
+    });
+}
+
+// Add this to your DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing code ...
+    initMapToggles();
+});
