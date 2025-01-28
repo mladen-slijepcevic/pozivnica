@@ -298,33 +298,38 @@ button:hover {
     margin-bottom: 2rem;
     position: relative;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .time {
     font-family: 'Montserrat', sans-serif;
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 600;
     color: #2c3e50;
-    padding-right: 1.5rem;
     min-width: 80px;
+    display: flex;
+    align-items: center;
 }
 
 .event {
     flex: 1;
+    padding-left: 1rem;
 }
 
 .event h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
     margin: 0 0 0.5rem 0;
     color: #2c3e50;
-    font-family: 'Cormorant Garamond', serif;
 }
 
 .venue {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
     color: #666;
+    margin: 0;
 }
 
 .map-container {
