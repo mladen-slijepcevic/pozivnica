@@ -128,7 +128,7 @@ function setLanguage(lang) {
     });
 
     // Update timeline venues
-    document.querySelectorAll('.venue-link').forEach(el => {
+    document.querySelectorAll('.venue').forEach(el => {
         if(el.textContent.includes('Lazarica')) {
             el.textContent = translations[lang].churchVenue;
         }
