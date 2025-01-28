@@ -1,5 +1,20 @@
 console.log('Script loaded successfully');
 
+// Remove all previous event listeners and intervals
+window.addEventListener('load', () => {
+    // Clear all existing intervals
+    for (let i = 1; i < 100; i++) {
+        clearInterval(i);
+    }
+    
+    // Remove any existing scripts
+    const oldScript = document.getElementById('countdown-script');
+    if (oldScript) {
+        oldScript.remove();
+    }
+});
+
+// Language and translation setup
 const translations = {
     en: {
         preTitle: "The Wedding of",
@@ -69,20 +84,45 @@ const translations = {
     }
 };
 
+// Main initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // Language button handling
     const langButtons = document.querySelectorAll('.lang-btn');
-    
     langButtons.forEach(button => {
         button.addEventListener('click', () => {
             const lang = button.dataset.lang;
             setLanguage(lang);
-            
-            // Update active button
             langButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
         });
     });
 
+    // Initialize countdown
+    function updateCountdown() {
+        const weddingDate = new Date(2025, 4, 31, 14, 15);
+        const now = new Date();
+        const diff = weddingDate - now;
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        const elements = {
+            days: document.getElementById('countdown-days'),
+            hours: document.getElementById('countdown-hours'),
+            minutes: document.getElementById('countdown-minutes')
+        };
+
+        if (elements.days) elements.days.textContent = days.toString().padStart(2, '0');
+        if (elements.hours) elements.hours.textContent = hours.toString().padStart(2, '0');
+        if (elements.minutes) elements.minutes.textContent = minutes.toString().padStart(2, '0');
+    }
+
+    // Start countdown
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+
+    // Initialize other features
     handleTimelineAnimation();
     initMapToggles();
     initGallery();
@@ -118,11 +158,10 @@ function setLanguage(lang) {
     });
     
     // Update countdown labels
-    document.querySelectorAll('.countdown-section .label').forEach(el => {
-        if(el.textContent.includes('Days')) el.textContent = translations[lang].days;
-        if(el.textContent.includes('Hours')) el.textContent = translations[lang].hours;
-        if(el.textContent.includes('Minutes')) el.textContent = translations[lang].minutes;
-    });
+    const labels = document.querySelectorAll('.countdown-section .label');
+    labels[0].textContent = translations[lang].days;
+    labels[1].textContent = translations[lang].hours;
+    labels[2].textContent = translations[lang].minutes;
     
     // Update direction buttons
     document.querySelectorAll('.directions-btn').forEach(btn => {
@@ -178,41 +217,6 @@ function setLanguage(lang) {
 const savedLang = localStorage.getItem('preferredLanguage') || 'sr';
 setLanguage(savedLang);
 document.querySelector(`[data-lang="${savedLang}"]`).classList.add('active');
-
-function updateCountdown() {
-    const weddingDate = new Date('2025-05-31T14:15:00+02:00').getTime();
-    const now = new Date().getTime();
-    const timeLeft = weddingDate - now;
-
-    // Check if the date has passed
-    if (timeLeft < 0) {
-        document.getElementById('countdown-days').innerHTML = '00';
-        document.getElementById('countdown-hours').innerHTML = '00';
-        document.getElementById('countdown-minutes').innerHTML = '00';
-        return;
-    }
-
-    // Calculate time units
-    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-
-    // Update DOM with padded numbers
-    document.getElementById('countdown-days').innerHTML = days.toString().padStart(2, '0');
-    document.getElementById('countdown-hours').innerHTML = hours.toString().padStart(2, '0');
-    document.getElementById('countdown-minutes').innerHTML = minutes.toString().padStart(2, '0');
-
-    // Add animation class only when the number changes
-    document.querySelectorAll('.countdown-number').forEach(el => {
-        el.classList.add('animate');
-        setTimeout(() => el.classList.remove('animate'), 500);
-    });
-}
-
-// Update countdown every minute
-setInterval(updateCountdown, 60000);
-// Initial call to avoid delay
-updateCountdown();
 
 // The weatherWidget object and its initialization have been removed
 
