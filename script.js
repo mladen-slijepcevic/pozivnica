@@ -246,3 +246,82 @@ function handleTimelineAnimation() {
 
 // Call this function when the page loads
 document.addEventListener('DOMContentLoaded', handleTimelineAnimation);
+
+// Gallery Lightbox
+function initGallery() {
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('.close-lightbox');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    let currentIndex = 0;
+
+    function showImage(index) {
+        const images = Array.from(galleryItems);
+        currentIndex = index;
+        const fullSizeUrl = images[index].dataset.full;
+        lightboxImg.src = fullSizeUrl;
+        lightboxImg.alt = images[index].alt;
+    }
+
+    function openLightbox(index) {
+        lightbox.classList.add('active');
+        showImage(index);
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        lightboxImg.src = '';
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    function showNext() {
+        const images = Array.from(galleryItems);
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+    }
+
+    function showPrev() {
+        const images = Array.from(galleryItems);
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+    }
+
+    // Event Listeners
+    galleryItems.forEach((img, index) => {
+        img.addEventListener('click', () => openLightbox(index));
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        
+        switch(e.key) {
+            case 'ArrowLeft':
+                showPrev();
+                break;
+            case 'ArrowRight':
+                showNext();
+                break;
+            case 'Escape':
+                closeLightbox();
+                break;
+        }
+    });
+}
+
+// Initialize gallery when the page loads
+document.addEventListener('DOMContentLoaded', initGallery);

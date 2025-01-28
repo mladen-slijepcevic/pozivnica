@@ -153,6 +153,34 @@
         </form>
     </section>
 
+    <section id="gallery">
+        <h2>Photo Gallery</h2>
+        <div class="gallery-grid">
+            <!-- Add your photos here. Example with 6 photos: -->
+            <div class="gallery-item">
+                <img src="images/gallery/photo1.jpg" 
+                     data-full="images/gallery/photo1.jpg" 
+                     alt="Jovanka and Mladen" 
+                     loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery/photo2.jpg" 
+                     data-full="images/gallery/photo2.jpg" 
+                     alt="Jovanka and Mladen" 
+                     loading="lazy">
+            </div>
+            <!-- Add more gallery items as needed -->
+        </div>
+
+        <!-- Lightbox -->
+        <div id="lightbox" class="lightbox">
+            <span class="close-lightbox">&times;</span>
+            <img id="lightbox-img" src="" alt="Gallery image">
+            <button class="prev-btn" aria-label="Previous image">&lt;</button>
+            <button class="next-btn" aria-label="Next image">&gt;</button>
+        </div>
+    </section>
+
     <script src="script.js"></script>
 </body>
 </html>
