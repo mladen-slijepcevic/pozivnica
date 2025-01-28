@@ -90,23 +90,17 @@ h2 {
     margin: 0.5rem 0;
 }
 
-.invitation-intro {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    color: #2c3e50;
-    font-style: italic;
-    margin-top: 1.5rem;
-    padding: 0 1rem;
-}
-
 /* Countdown styling for mobile */
 #countdown {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
-    gap: 0.8rem;
-    padding: 1rem;
-    margin: 1rem auto;
-    background-color: #e6efe6;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    margin: 2rem auto 0;
+    max-width: 600px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .countdown-item {
@@ -117,8 +111,7 @@ h2 {
 .countdown-box {
     background: rgba(44, 62, 80, 0.05);
     padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     transition: transform 0.3s ease;
 }
 
@@ -407,11 +400,6 @@ button:hover {
 
     .date {
         font-size: 1.2rem;
-    }
-
-    .invitation-intro {
-        font-size: 1.4rem;
-        margin-top: 2rem;
     }
 
     #countdown {

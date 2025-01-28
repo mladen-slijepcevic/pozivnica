@@ -3,7 +3,7 @@ console.log('Script loaded successfully');
 const translations = {
     en: {
         preTitle: "The Wedding of",
-        inviteText: "We invite you to celebrate our love",
+        // Remove inviteText: "We invite you to celebrate our love",
         gettingMarried: "We're Getting Married!",
         withJoy: "With joy in our hearts,",
         inviteMessage: "We kindly invite you to share in our happiness",
@@ -35,7 +35,7 @@ const translations = {
     },
     sr: {
         preTitle: "Venčanje",
-        inviteText: "Vas pozivaju da svojim prisustvom uveličate naše venčanje",
+        // Remove inviteText: "Vas pozivaju da svojim prisustvom uveličate naše venčanje",
         gettingMarried: "Venčavamo se!",
         withJoy: "Sa radošću u srcima,",
         inviteMessage: "Srdačno vas pozivamo da podelite našu sreću",
@@ -88,7 +88,8 @@ function setLanguage(lang) {
     
     // Update all translatable elements
     document.querySelector('.pre-title').textContent = translations[lang].preTitle;
-    document.querySelector('.invitation-intro').textContent = translations[lang].inviteText;
+    // Remove this line:
+    // document.querySelector('.invitation-intro').textContent = translations[lang].inviteText;
     document.querySelector('#details h2').textContent = translations[lang].gettingMarried;
     
     // Update RSVP form
