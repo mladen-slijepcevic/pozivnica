@@ -294,6 +294,39 @@ button:hover {
     margin-bottom: 2rem;
 }
 
+/* Language selector */
+.language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.lang-btn.active {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.lang-separator {
+    color: #ddd;
+    margin: 0 4px;
+}
+
 /* Responsive adjustments */
 @media (min-width: 768px) {
     header {
@@ -403,4 +436,18 @@ img {
 /* Ensure buttons and links have enough space */
 a, button {
     padding: 0.8rem 1.5rem;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .language-selector {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+    }
+    
+    .lang-btn {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
 }
