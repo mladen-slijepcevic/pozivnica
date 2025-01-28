@@ -136,6 +136,32 @@ header {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
+.countdown-section {
+    margin-top: 3rem;
+    text-align: center;
+    padding: 2rem 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.countdown-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
 .countdown-item {
     text-align: center;
     min-width: 80px;
@@ -159,16 +185,13 @@ header {
     color: #2c3e50;
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 0.5rem;
-    position: relative;
 }
 
-.countdown-item .label {
-    display: block;
-    font-size: 0.8rem;
+.label {
+    font-size: 0.9rem;
+    color: #666;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #666;
-    font-weight: 500;
 }
 
 /* Animation for number changes */

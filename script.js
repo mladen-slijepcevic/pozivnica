@@ -31,7 +31,8 @@ const translations = {
         showMap: "Show Map",
         hideMap: "Hide Map",
         addToGoogleCalendar: "Add to Google Calendar",
-        addToIphoneCalendar: "Add to iPhone Calendar"
+        addToIphoneCalendar: "Add to iPhone Calendar",
+        countdownTitle: "Time until we celebrate:"
     },
     sr: {
         preTitle: "Venčanje",
@@ -63,7 +64,8 @@ const translations = {
         showMap: "Prikaži mapu",
         hideMap: "Sakrij mapu",
         addToGoogleCalendar: "Dodaj u Google Kalendar",
-        addToIphoneCalendar: "Dodaj u iPhone Kalendar"
+        addToIphoneCalendar: "Dodaj u iPhone Kalendar",
+        countdownTitle: "Vreme do proslave:"
     }
 };
 
@@ -116,7 +118,7 @@ function setLanguage(lang) {
     });
     
     // Update countdown labels
-    document.querySelectorAll('.countdown-item .label').forEach(el => {
+    document.querySelectorAll('.countdown-section .label').forEach(el => {
         if(el.textContent.includes('Days')) el.textContent = translations[lang].days;
         if(el.textContent.includes('Hours')) el.textContent = translations[lang].hours;
         if(el.textContent.includes('Minutes')) el.textContent = translations[lang].minutes;
@@ -167,6 +169,9 @@ function setLanguage(lang) {
     document.querySelector('.invitation-text p:nth-child(2)').textContent = translations[lang].inviteMessage;
     document.querySelector('.invitation-text p:nth-child(1)').textContent = translations[lang].withJoy;
     document.querySelector('.invitation-text p:nth-child(3)').textContent = translations[lang].asWeJoin;
+
+    // Update countdown title
+    document.querySelector('.countdown-section .countdown-title').textContent = translations[lang].countdownTitle;
 }
 
 // Set initial language based on stored preference or default to Serbian
@@ -181,9 +186,9 @@ function updateCountdown() {
 
     // Check if the date has passed
     if (timeLeft < 0) {
-        document.getElementById('days').innerHTML = '00';
-        document.getElementById('hours').innerHTML = '00';
-        document.getElementById('minutes').innerHTML = '00';
+        document.getElementById('countdown-days').innerHTML = '00';
+        document.getElementById('countdown-hours').innerHTML = '00';
+        document.getElementById('countdown-minutes').innerHTML = '00';
         return;
     }
 
@@ -193,9 +198,9 @@ function updateCountdown() {
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
     // Update DOM with padded numbers
-    document.getElementById('days').innerHTML = days.toString().padStart(2, '0');
-    document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
-    document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
+    document.getElementById('countdown-days').innerHTML = days.toString().padStart(2, '0');
+    document.getElementById('countdown-hours').innerHTML = hours.toString().padStart(2, '0');
+    document.getElementById('countdown-minutes').innerHTML = minutes.toString().padStart(2, '0');
 
     // Add animation class only when the number changes
     document.querySelectorAll('.countdown-number').forEach(el => {
@@ -204,7 +209,7 @@ function updateCountdown() {
     });
 }
 
-// Update countdown every minute instead of every second
+// Update countdown every minute
 setInterval(updateCountdown, 60000);
 // Initial call to avoid delay
 updateCountdown();

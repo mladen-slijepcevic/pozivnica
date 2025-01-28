@@ -25,6 +25,30 @@
         </div>
     </header>
 
+    <div id="countdown">
+        <h2 class="countdown-title">Join us in:</h2>
+        <div class="countdown-container">
+            <div class="countdown-item">
+                <div class="countdown-box">
+                    <span id="days" class="countdown-number">00</span>
+                    <span class="label">Days</span>
+                </div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-box">
+                    <span id="hours" class="countdown-number">00</span>
+                    <span class="label">Hours</span>
+                </div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-box">
+                    <span id="minutes" class="countdown-number">00</span>
+                    <span class="label">Minutes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section id="main-photo">
         <!-- Add your main photo here -->
         <img src="images/main-photo.jpg" alt="Jovanka and Mladen">
@@ -108,17 +132,35 @@
         </div>
         <div class="calendar-buttons">
             <button class="calendar-btn" data-calendar="google">
-                <svg class="calendar-icon" viewBox="0 0 24 24">
-                    <path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A2,2,0,0,0,3,6V20a2,2,0,0,0,2,2H19a2,2,0,0,0,2-2V6A2,2,0,0,0,19,4Zm0,16H5V10H19ZM19,8H5V6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2Z"/>
-                </svg>
-                <span class="calendar-text">Add to Google Calendar</span>
+                Add to Google Calendar
             </button>
             <button class="calendar-btn" data-calendar="ical">
-                <svg class="calendar-icon" viewBox="0 0 24 24">
-                    <path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A2,2,0,0,0,3,6V20a2,2,0,0,0,2,2H19a2,2,0,0,0,2-2V6A2,2,0,0,0,19,4Zm0,16H5V10H19ZM19,8H5V6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2Z"/>
-                </svg>
-                <span class="calendar-text">Add to iPhone Calendar</span>
+                Add to iPhone Calendar
             </button>
+        </div>
+
+        <div class="countdown-section">
+            <h3 class="countdown-title">Time until we celebrate:</h3>
+            <div class="countdown-container">
+                <div class="countdown-item">
+                    <div class="countdown-box">
+                        <span class="countdown-number" id="countdown-days">00</span>
+                        <span class="label">Days</span>
+                    </div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-box">
+                        <span class="countdown-number" id="countdown-hours">00</span>
+                        <span class="label">Hours</span>
+                    </div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-box">
+                        <span class="countdown-number" id="countdown-minutes">00</span>
+                        <span class="label">Minutes</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
