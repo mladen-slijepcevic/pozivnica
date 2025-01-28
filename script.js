@@ -47,7 +47,9 @@ const translations = {
         hideMap: "Hide Map",
         addToGoogleCalendar: "Add to Google Calendar",
         addToIphoneCalendar: "Add to iPhone Calendar",
-        countdownTitle: "Time until we celebrate:"
+        countdownTitle: "Time until we celebrate:",
+        rsvpSuccess: "Thank you for your response! We have received your RSVP.",
+        rsvpError: "Sorry, there was an error sending your RSVP. Please try again."
     },
     sr: {
         preTitle: "Venčanje",
@@ -80,7 +82,9 @@ const translations = {
         hideMap: "Sakrij mapu",
         addToGoogleCalendar: "Dodaj u Google Kalendar",
         addToIphoneCalendar: "Dodaj u iPhone Kalendar",
-        countdownTitle: "Vreme do proslave:"
+        countdownTitle: "Vreme do proslave:",
+        rsvpSuccess: "Hvala na odgovoru! Vaša potvrda je uspešno primljena.",
+        rsvpError: "Došlo je do greške. Molimo pokušajte ponovo."
     }
 };
 
@@ -425,12 +429,11 @@ async function handleRSVP(event) {
     };
 
     try {
-        // Send email using EmailJS
         await emailjs.send(
-            "service_fer518o", // Add your EmailJS service ID
-            "template_092gnfq", // Add your EmailJS template ID
+            "service_fer518o",
+            "template_092gnfq",
             {
-                to_email: "mladen.slijepcevic.eestec@gmail.com.com", // Your email address
+                to_email: "mladen.slijepcevic.eestec@gmail.com",
                 from_name: formData.name,
                 from_email: formData.email,
                 attendance: formData.attendance,
@@ -439,14 +442,15 @@ async function handleRSVP(event) {
             }
         );
 
-        // Store RSVP in localStorage
-        let rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
-        rsvps.push(formData);
-        localStorage.setItem('rsvps', JSON.stringify(rsvps));
-
-        // Show success message
+        // Create success message with proper styling
         const successMessage = document.createElement('div');
         successMessage.className = 'rsvp-message success';
+        successMessage.style.padding = '20px';
+        successMessage.style.backgroundColor = '#e8f5e9';
+        successMessage.style.color = '#2e7d32';
+        successMessage.style.borderRadius = '8px';
+        successMessage.style.textAlign = 'center';
+        successMessage.style.fontSize = '1.2rem';
         successMessage.textContent = translations[localStorage.getItem('preferredLanguage') || 'sr'].rsvpSuccess;
         
         // Replace form with success message
@@ -457,8 +461,21 @@ async function handleRSVP(event) {
         console.error('RSVP Error:', error);
         const errorMessage = document.createElement('div');
         errorMessage.className = 'rsvp-message error';
+        errorMessage.style.padding = '20px';
+        errorMessage.style.backgroundColor = '#ffebee';
+        errorMessage.style.color = '#c62828';
+        errorMessage.style.borderRadius = '8px';
+        errorMessage.style.textAlign = 'center';
+        errorMessage.style.marginBottom = '20px';
         errorMessage.textContent = translations[localStorage.getItem('preferredLanguage') || 'sr'].rsvpError;
         form.prepend(errorMessage);
         submitButton.disabled = false;
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const rsvpForm = document.getElementById('rsvp-form');
+    if (rsvpForm) {
+        rsvpForm.addEventListener('submit', handleRSVP);
+    }
+});
