@@ -171,3 +171,78 @@ function updateCountdown() {
 setInterval(updateCountdown, 60000);
 // Initial call to avoid delay
 updateCountdown();
+
+const weatherWidget = {
+    API_KEY: '905aa3a029084ea481d142351252801',
+
+    async getWeatherForecast() {
+        const weatherSection = document.getElementById('weather');
+        const weatherEl = document.getElementById('weather-forecast');
+        const weddingDate = '2025-05-31';
+        const location = 'Belgrade,RS';
+
+        try {
+            const response = await fetch(
+                `https://api.weatherapi.com/v1/forecast.json?key=${this.API_KEY}&q=${location}&dt=${weddingDate}`
+            );
+            
+            if (!response.ok) {
+                throw new Error('Weather API request failed');
+            }
+
+            const data = await response.json();
+            
+            // Get the forecast for the wedding date
+            const forecast = data.forecast.forecastday[0].day;
+            
+            weatherEl.innerHTML = `
+                <div class="weather-info">
+                    <img src="https:${forecast.condition.icon}" alt="${forecast.condition.text}">
+                    <span>${Math.round(forecast.avgtemp_c)}°C</span>
+                    <p>${forecast.condition.text}</p>
+                    <div class="weather-details">
+                        <p>High: ${Math.round(forecast.maxtemp_c)}°C</p>
+                        <p>Low: ${Math.round(forecast.mintemp_c)}°C</p>
+                        <p>Chance of Rain: ${forecast.daily_chance_of_rain}%</p>
+                    </div>
+                </div>
+            `;
+        } catch (err) {
+            console.error('Weather forecast error:', err);
+            // Hide the entire weather section if there's an error
+            weatherSection.style.display = 'none';
+        }
+    },
+
+    init() {
+        this.getWeatherForecast();
+        // Update weather every hour
+        setInterval(() => this.getWeatherForecast(), 3600000);
+    }
+};
+
+// Initialize weather widget when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    weatherWidget.init();
+});
+
+function handleTimelineAnimation() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    timelineItems.forEach(item => {
+        observer.observe(item);
+    });
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', handleTimelineAnimation);
