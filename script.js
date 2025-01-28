@@ -138,8 +138,6 @@ function setLanguage(lang) {
     
     // Update all translatable elements
     document.querySelector('.pre-title').textContent = translations[lang].preTitle;
-    // Remove this line:
-    // document.querySelector('.invitation-intro').textContent = translations[lang].inviteText;
     document.querySelector('#details h2').textContent = translations[lang].gettingMarried;
     
     // Update RSVP form
@@ -178,7 +176,6 @@ function setLanguage(lang) {
             el.textContent = translations[lang].churchVenue;
         }
         if(el.textContent.includes('Verde')) {
-            // Check if this is in the Wedding Celebration section
             const eventTitle = el.closest('.event').querySelector('h3').textContent;
             if(eventTitle.includes('Wedding')) {
                 el.textContent = translations[lang].weddingVenue;
@@ -198,13 +195,12 @@ function setLanguage(lang) {
             : translations[lang].showMap;
     });
 
-    // Update calendar button texts
+    // Update calendar buttons - with null check
     document.querySelectorAll('.calendar-btn').forEach(btn => {
-        const textSpan = btn.querySelector('.calendar-text');
         if (btn.dataset.calendar === 'google') {
-            textSpan.textContent = translations[lang].addToGoogleCalendar;
+            btn.textContent = translations[lang].addToGoogleCalendar;
         } else if (btn.dataset.calendar === 'ical') {
-            textSpan.textContent = translations[lang].addToIphoneCalendar;
+            btn.textContent = translations[lang].addToIphoneCalendar;
         }
     });
 
