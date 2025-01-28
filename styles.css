@@ -213,6 +213,35 @@ button:hover {
     font-size: 0.9rem;
 }
 
+.invitation-text {
+    text-align: center;
+    margin: 3rem auto;
+    max-width: 600px;
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1.8;
+}
+
+.invitation-text p {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.invitation-text .names {
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.invitation-text .wedding-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    color: #666;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+
 @media (max-width: 768px) {
     .timeline-item {
         padding-left: 2rem;
