@@ -107,8 +107,8 @@ function setLanguage(lang) {
     });
 }
 
-// Set initial language based on stored preference or default to English
-const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+// Set initial language based on stored preference or default to Serbian
+const savedLang = localStorage.getItem('preferredLanguage') || 'sr';
 setLanguage(savedLang);
 document.querySelector(`[data-lang="${savedLang}"]`).classList.add('active');
 
