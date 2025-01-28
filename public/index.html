@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Wedding Invitation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Jovanka & Mladen</h1>
+        <p class="date">31. Maj 2025</p>
+    </header>
+
+    <section id="main-photo">
+        <!-- Add your main photo here -->
+        <img src="placeholder.jpg" alt="Jovanka and Mladen">
+    </section>
+
+    <section id="details">
+        <h2>We're Getting Married!</h2>
+        <p>Please join us in celebrating our special day</p>
+        <div class="event-details">
+            <p>Subota, 31. Maj, 2025</p>
+            <p>16:00 PM</p>
+            <p>Restoran Verde</p>
+        </div>
+    </section>
+
+    <section id="map">
+        <h2>Lokacija</h2>
+        <div id="google-map">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2827.8800049479723!2d20.47429047711282!3d44.86473757107052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x475a65be5ced9659%3A0xec9882b149f6f797!2sVerde%20ven%C4%8Danja%20na%20otvorenom!5e0!3m2!1ssr!2srs!4v1738003591612!5m2!1ssr!2srs" 
+                width="100%" 
+                height="400" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        <a href="#" class="directions-btn">Get Directions</a>
+    </section>
+
+    <section id="rsvp">
+        <h2>RSVP</h2>
+        <form id="rsvp-form">
+            <div class="form-group">
+                <input type="text" id="name" required placeholder="Your Name">
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" required placeholder="Your Email">
+            </div>
+            <div class="form-group">
+                <select id="attendance" required>
+                    <option value="">Will you attend?</option>
+                    <option value="yes">Joyfully Accepts</option>
+                    <option value="no">Regretfully Declines</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="number" id="guests" placeholder="Number of Guests" min="0" max="5">
+            </div>
+            <button type="submit">Send RSVP</button>
+        </form>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

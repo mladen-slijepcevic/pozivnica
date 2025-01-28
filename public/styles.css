@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #e8f5e9; /* Light green background */
+}
+
+header {
+    text-align: center;
+    padding: 4rem 0;
+    background-color: #c8e6c9; /* Slightly darker green for header */
+}
+
+section {
+    padding: 3rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white; /* White background for sections */
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+#main-photo {
+    text-align: center;
+}
+
+#main-photo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.event-details {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+#google-map {
+    height: 400px;
+    margin: 2rem 0;
+    background-color: #f0f0f0;
+}
+
+.directions-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #4CAF50;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem auto;
+    max-width: 200px;
+}
+
+#rsvp-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
