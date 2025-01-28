@@ -52,42 +52,75 @@ header {
 }
 
 .header-content {
-    margin-bottom: 2rem;
+    text-align: center;
+    padding: 2rem 1rem;
 }
 
 .pre-title {
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #666;
     font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
 }
 
-h1 {
+.names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.name {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.8rem;
-    color: #2c3e50;
-    margin: 0.5rem 0;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 1.2;
+    color: #2c3e50;
 }
 
-h2 {
+.ampersand {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.5rem;
+    font-style: italic;
     color: #2c3e50;
-    text-align: center;
-    margin-bottom: 2rem;
-    font-weight: 400;
+    line-height: 1;
 }
 
 .date {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    color: #666;
-    letter-spacing: 2px;
-    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-top: 1.5rem;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+    .names {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .name {
+        font-size: 4rem;
+    }
+
+    .ampersand {
+        font-size: 3.5rem;
+    }
+}
+
+/* Ensure text remains readable in dark mode */
+@media (prefers-color-scheme: dark) {
+    .pre-title,
+    .name,
+    .ampersand,
+    .date {
+        color: #f0f5f0;
+    }
 }
 
 /* Countdown styling for mobile */
