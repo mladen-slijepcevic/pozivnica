@@ -113,9 +113,18 @@ setLanguage(savedLang);
 document.querySelector(`[data-lang="${savedLang}"]`).classList.add('active');
 
 function updateCountdown() {
-    const weddingDate = new Date('2025-05-31T14:15:00').getTime();
+    const weddingDate = new Date('2025-05-31T14:15:00+02:00').getTime(); // Added timezone offset for Serbia
     const now = new Date().getTime();
     const timeLeft = weddingDate - now;
+
+    // Check if the date has passed
+    if (timeLeft < 0) {
+        document.getElementById('days').innerHTML = '00';
+        document.getElementById('hours').innerHTML = '00';
+        document.getElementById('minutes').innerHTML = '00';
+        document.getElementById('seconds').innerHTML = '00';
+        return;
+    }
 
     // Calculate time units
     const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
@@ -123,13 +132,13 @@ function updateCountdown() {
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-    // Update DOM
+    // Update DOM with padded numbers
     document.getElementById('days').innerHTML = days.toString().padStart(2, '0');
     document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
     document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
     document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
 
-    // Add animation class
+    // Add animation class only when the number changes
     document.querySelectorAll('.countdown-number').forEach(el => {
         el.classList.add('animate');
         setTimeout(() => el.classList.remove('animate'), 500);
