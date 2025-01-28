@@ -23,7 +23,11 @@ const translations = {
         days: "Days",
         hours: "Hours",
         minutes: "Minutes",
-        seconds: "Seconds"
+        seconds: "Seconds",
+        churchVenue: "St. Prince Lazar Church - Lazarica",
+        gatheringVenue: "Restaurant Verde",
+        weddingVenue: "Restaurant Verde",
+        saturday: "Saturday, May 31st 2025"
     },
     sr: {
         preTitle: "Venčanje",
@@ -47,7 +51,11 @@ const translations = {
         days: "Dana",
         hours: "Sati",
         minutes: "Minuta",
-        seconds: "Sekundi"
+        seconds: "Sekundi",
+        churchVenue: "Crkva svetog Kneza Lazara - Lazarica",
+        gatheringVenue: "Restoran Verde",
+        weddingVenue: "Restoran Verde",
+        saturday: "Subota, 31. Maj 2025"
     }
 };
 
@@ -105,6 +113,23 @@ function setLanguage(lang) {
     document.querySelectorAll('.directions-btn').forEach(btn => {
         btn.textContent = translations[lang].getDirections;
     });
+
+    // Update timeline venues
+    document.querySelectorAll('.venue').forEach(el => {
+        if(el.textContent.includes('Lazarica')) el.textContent = translations[lang].churchVenue;
+        if(el.textContent.includes('Verde')) {
+            // Check if this is in the Wedding Celebration section
+            const eventTitle = el.closest('.event').querySelector('h3').textContent;
+            if(eventTitle.includes('Wedding')) {
+                el.textContent = translations[lang].weddingVenue;
+            } else {
+                el.textContent = translations[lang].gatheringVenue;
+            }
+        }
+    });
+
+    // Update wedding date in details section
+    document.querySelector('.wedding-date').textContent = translations[lang].saturday;
 }
 
 // Set initial language based on stored preference or default to Serbian
