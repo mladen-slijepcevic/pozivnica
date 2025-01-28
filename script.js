@@ -47,7 +47,7 @@ const translations = {
         regretfullyDeclines: "Nažalost ne mogu",
         numberOfGuests: "Broj gostiju",
         sendRsvp: "Pošalji potvrdu",
-        getDirections: "Pokaži put",
+        getDirections: "Prikaži lokaciju",
         days: "Dana",
         hours: "Sati",
         minutes: "Minuta",
