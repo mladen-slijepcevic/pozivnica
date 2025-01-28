@@ -73,27 +73,56 @@ h2 {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 1.5rem;
-    padding: 0 1rem;
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 600px;
 }
 
 .countdown-item {
     text-align: center;
-    min-width: 60px;
+    min-width: 80px;
 }
 
-.countdown-item span {
+.countdown-box {
+    background: rgba(44, 62, 80, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.countdown-box:hover {
+    transform: translateY(-2px);
+}
+
+.countdown-number {
     display: block;
-    font-size: 1.8rem;
+    font-size: 2.5rem;
     font-weight: 600;
     color: #2c3e50;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0.5rem;
+    position: relative;
 }
 
 .countdown-item .label {
+    display: block;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #666;
+    font-weight: 500;
+}
+
+/* Animation for number changes */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.countdown-number.animate {
+    animation: pulse 0.5s ease-in-out;
 }
 
 section {
@@ -450,4 +479,17 @@ a, button {
         font-size: 12px;
         padding: 4px 6px;
     }
+}
+
+/* Add these to your translations object in script.js */
+.countdown-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    border-radius: 12px;
+    pointer-events: none;
 }

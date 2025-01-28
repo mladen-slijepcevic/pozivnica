@@ -22,7 +22,8 @@ const translations = {
         getDirections: "Get Directions",
         days: "Days",
         hours: "Hours",
-        minutes: "Minutes"
+        minutes: "Minutes",
+        seconds: "Seconds"
     },
     sr: {
         preTitle: "Venčanje",
@@ -45,7 +46,8 @@ const translations = {
         getDirections: "Pokaži put",
         days: "Dana",
         hours: "Sati",
-        minutes: "Minuta"
+        minutes: "Minuta",
+        seconds: "Sekundi"
     }
 };
 
@@ -109,3 +111,32 @@ function setLanguage(lang) {
 const savedLang = localStorage.getItem('preferredLanguage') || 'en';
 setLanguage(savedLang);
 document.querySelector(`[data-lang="${savedLang}"]`).classList.add('active');
+
+function updateCountdown() {
+    const weddingDate = new Date('2025-05-31T14:15:00').getTime();
+    const now = new Date().getTime();
+    const timeLeft = weddingDate - now;
+
+    // Calculate time units
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    // Update DOM
+    document.getElementById('days').innerHTML = days.toString().padStart(2, '0');
+    document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
+
+    // Add animation class
+    document.querySelectorAll('.countdown-number').forEach(el => {
+        el.classList.add('animate');
+        setTimeout(() => el.classList.remove('animate'), 500);
+    });
+}
+
+// Update countdown every second
+setInterval(updateCountdown, 1000);
+// Initial call to avoid delay
+updateCountdown();
