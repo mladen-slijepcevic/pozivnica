@@ -408,3 +408,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+async function handleRSVP(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('rsvp-form');
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        attendance: document.getElementById('attendance').value,
+        numberOfGuests: document.getElementById('guests').value || 0,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        // Send email using EmailJS
+        await emailjs.send(
+            "service_fer518o", // Add your EmailJS service ID
+            "template_092gnfq", // Add your EmailJS template ID
+            {
+                to_email: "mladen.slijepcevic.eestec@gmail.com.com", // Your email address
+                from_name: formData.name,
+                from_email: formData.email,
+                attendance: formData.attendance,
+                guests: formData.numberOfGuests,
+                reply_to: formData.email
+            }
+        );
+
+        // Store RSVP in localStorage
+        let rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+        rsvps.push(formData);
+        localStorage.setItem('rsvps', JSON.stringify(rsvps));
+
+        // Show success message
+        const successMessage = document.createElement('div');
+        successMessage.className = 'rsvp-message success';
+        successMessage.textContent = translations[localStorage.getItem('preferredLanguage') || 'sr'].rsvpSuccess;
+        
+        // Replace form with success message
+        form.innerHTML = '';
+        form.appendChild(successMessage);
+
+    } catch (error) {
+        console.error('RSVP Error:', error);
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'rsvp-message error';
+        errorMessage.textContent = translations[localStorage.getItem('preferredLanguage') || 'sr'].rsvpError;
+        form.prepend(errorMessage);
+        submitButton.disabled = false;
+    }
+}
