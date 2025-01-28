@@ -128,8 +128,10 @@ function setLanguage(lang) {
     });
 
     // Update timeline venues
-    document.querySelectorAll('.venue').forEach(el => {
-        if(el.textContent.includes('Lazarica')) el.textContent = translations[lang].churchVenue;
+    document.querySelectorAll('.venue-link').forEach(el => {
+        if(el.textContent.includes('Lazarica')) {
+            el.textContent = translations[lang].churchVenue;
+        }
         if(el.textContent.includes('Verde')) {
             // Check if this is in the Wedding Celebration section
             const eventTitle = el.closest('.event').querySelector('h3').textContent;
