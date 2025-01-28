@@ -415,6 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function handleRSVP(event) {
     event.preventDefault();
+    console.log('RSVP form submitted'); // Debug log
     
     const form = document.getElementById('rsvp-form');
     const submitButton = form.querySelector('button[type="submit"]');
@@ -427,8 +428,11 @@ async function handleRSVP(event) {
         numberOfGuests: document.getElementById('guests').value || 0,
         timestamp: new Date().toISOString()
     };
+    
+    console.log('Form data:', formData); // Debug log
 
     try {
+        console.log('Attempting to send email...'); // Debug log
         await emailjs.send(
             "service_fer518o",
             "template_092gnfq",
@@ -441,6 +445,7 @@ async function handleRSVP(event) {
                 reply_to: formData.email
             }
         );
+        console.log('Email sent successfully'); // Debug log
 
         // Create success message with proper styling
         const successMessage = document.createElement('div');
@@ -458,7 +463,7 @@ async function handleRSVP(event) {
         form.appendChild(successMessage);
 
     } catch (error) {
-        console.error('RSVP Error:', error);
+        console.error('RSVP Error:', error); // Debug log
         const errorMessage = document.createElement('div');
         errorMessage.className = 'rsvp-message error';
         errorMessage.style.padding = '20px';
@@ -474,8 +479,12 @@ async function handleRSVP(event) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded'); // Debug log
     const rsvpForm = document.getElementById('rsvp-form');
     if (rsvpForm) {
+        console.log('RSVP form found, adding listener'); // Debug log
         rsvpForm.addEventListener('submit', handleRSVP);
+    } else {
+        console.log('RSVP form not found!'); // Debug log
     }
 });
