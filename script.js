@@ -156,6 +156,11 @@ function setLanguage(lang) {
             textSpan.textContent = translations[lang].addToIphoneCalendar;
         }
     });
+
+    // Update invitation text elements
+    document.querySelector('.invitation-text p:nth-child(2)').textContent = translations[lang].inviteMessage;
+    document.querySelector('.invitation-text p:nth-child(1)').textContent = translations[lang].withJoy;
+    document.querySelector('.invitation-text p:nth-child(3)').textContent = translations[lang].asWeJoin;
 }
 
 // Set initial language based on stored preference or default to Serbian
