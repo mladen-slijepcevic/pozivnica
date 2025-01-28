@@ -52,29 +52,8 @@ const translations = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const langSelector = document.querySelector('.language-selector');
     const langButtons = document.querySelectorAll('.lang-btn');
     
-    // Hide language selector after 3 seconds on initial load
-    setTimeout(() => {
-        langSelector.classList.add('hidden');
-    }, 3000);
-
-    // Show language selector when hovering near the top right corner
-    document.addEventListener('mousemove', (e) => {
-        if (e.clientY < 100 && e.clientX > window.innerWidth - 100) {
-            langSelector.classList.remove('hidden');
-        }
-    });
-
-    // For mobile: show on tap near top right corner
-    document.addEventListener('touchstart', (e) => {
-        const touch = e.touches[0];
-        if (touch.clientY < 100 && touch.clientX > window.innerWidth - 100) {
-            langSelector.classList.remove('hidden');
-        }
-    });
-
     langButtons.forEach(button => {
         button.addEventListener('click', () => {
             const lang = button.dataset.lang;
@@ -83,11 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update active button
             langButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-            
-            // Hide selector after selection
-            setTimeout(() => {
-                langSelector.classList.add('hidden');
-            }, 500);
         });
     });
 });
