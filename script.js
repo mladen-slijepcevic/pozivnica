@@ -359,7 +359,7 @@ function generateCalendarEvent() {
         description: 'Venčanje\n\n' +
                     '14:15 - Crkveno venčanje u Crkvi svetog Kneza Lazara - Lazarica\n' +
                     '16:00 - Skup svatova u Restoranu Verde\n' +
-                    '17:00 - Gradjansko venčanje u Restoranu Verde',
+                    '17:30 - Gradjansko venčanje u Restoranu Verde',
         location: 'Crkva svetog Kneza Lazara - Lazarica, Beograd, Srbija',
         startDate: '2025-05-31T14:15:00',
         endDate: '2025-05-31T23:59:00'
