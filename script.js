@@ -325,22 +325,32 @@ function initMapToggles() {
         button.addEventListener('click', () => {
             const mapContainer = button.nextElementSibling;
             const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
             
+            // Toggle aria-expanded
             button.setAttribute('aria-expanded', !isExpanded);
-            button.textContent = !isExpanded 
-                ? translations[localStorage.getItem('preferredLanguage') || 'sr'].hideMap 
-                : translations[localStorage.getItem('preferredLanguage') || 'sr'].showMap;
             
-            mapContainer.classList.toggle('show');
+            // Update button text based on new state
+            button.textContent = !isExpanded 
+                ? translations[currentLang].hideMap 
+                : translations[currentLang].showMap;
+            
+            // Toggle map visibility
+            mapContainer.style.display = !isExpanded ? 'block' : 'none';
             mapContainer.hidden = isExpanded;
         });
     });
 }
 
-// Add this to your DOMContentLoaded event listener
+// Make sure this is called when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // ... existing code ...
     initMapToggles();
+    
+    // Initialize map containers to be hidden
+    document.querySelectorAll('.map-container').forEach(container => {
+        container.style.display = 'none';
+        container.hidden = true;
+    });
 });
 
 function generateCalendarEvent() {
