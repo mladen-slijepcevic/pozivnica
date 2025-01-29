@@ -355,12 +355,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function generateCalendarEvent() {
     const event = {
-        title: 'Wedding of Jovanka & Mladen',
-        description: 'Wedding Ceremony and Celebration\n\n' +
-                    '14:15 - Church Ceremony at St. Prince Lazar Church - Lazarica\n' +
-                    '16:00 - Guest Gathering at Restoran Verde\n' +
-                    '17:00 - Wedding Celebration at Restoran Verde',
-        location: 'St. Prince Lazar Church - Lazarica, Belgrade, Serbia',
+        title: 'Venčanje Jovanke i Mladena',
+        description: 'Venčanje\n\n' +
+                    '14:15 - Crkveno venčanje u Crkvi svetog Kneza Lazara - Lazarica\n' +
+                    '16:00 - Skup svatova u Restoranu Verde\n' +
+                    '17:00 - Gradjansko venčanje u Restoranu Verde',
+        location: 'Crkva svetog Kneza Lazara - Lazarica, Beograd, Srbija',
         startDate: '2025-05-31T14:15:00',
         endDate: '2025-05-31T23:59:00'
     };
@@ -376,7 +376,8 @@ function addToGoogleCalendar(event) {
         text: event.title,
         details: event.description,
         location: event.location,
-        dates: dates
+        dates: dates,
+        reminders: 'POPUP,10080' // 7 days in minutes (7 * 24 * 60 = 10080)
     });
 
     window.open(`${baseUrl}&${params.toString()}`, '_blank');
@@ -391,13 +392,18 @@ DTEND:${event.endDate.replace(/[-:]/g, '')}
 SUMMARY:${event.title}
 DESCRIPTION:${event.description.replace(/\n/g, '\\n')}
 LOCATION:${event.location}
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+TRIGGER:-P7D
+END:VALARM
 END:VEVENT
 END:VCALENDAR`;
 
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.download = 'wedding_jovanka_mladen.ics';
+    link.download = 'vencanje_jovanka_mladen.ics';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
