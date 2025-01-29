@@ -17,6 +17,7 @@ window.addEventListener('load', () => {
 // Language and translation setup
 const translations = {
     en: {
+        pageTitle: "Our Wedding Invitation",
         preTitle: "The Wedding of",
         // Remove inviteText: "We invite you to celebrate our love",
         gettingMarried: "We're Getting Married!",
@@ -55,6 +56,7 @@ const translations = {
         attendNo: "Regretfully Decline"
     },
     sr: {
+        pageTitle: "Pozivnica za svadbu",
         preTitle: "Venčanje",
         // Remove inviteText: "Vas pozivaju da svojim prisustvom uveličate naše venčanje",
         gettingMarried: "Venčavamo se!",
