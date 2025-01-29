@@ -1074,7 +1074,7 @@ button,
 
 /* Map toggle */
 .map-toggle {
-    display: none; /* Hidden by default for desktop */
+    display: block;
     width: 100%;
     padding: 0.8rem;
     margin: 0.5rem 0;

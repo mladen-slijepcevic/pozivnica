@@ -211,6 +211,9 @@ function setLanguage(lang) {
 
     // Update countdown title
     document.querySelector('.countdown-section .countdown-title').textContent = translations[lang].countdownTitle;
+
+    // Reinitialize map toggles after language change
+    initMapToggles();
 }
 
 // Set initial language based on stored preference or default to Serbian
@@ -321,29 +324,39 @@ function initGallery() {
 document.addEventListener('DOMContentLoaded', initGallery);
 
 function initMapToggles() {
-    document.querySelectorAll('.map-toggle').forEach(button => {
-        button.addEventListener('click', () => {
-            const mapContainer = button.nextElementSibling;
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+    const mapButtons = document.querySelectorAll('.map-toggle');
+    
+    mapButtons.forEach(button => {
+        // Remove any existing listeners to prevent duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', function() {
+            console.log('Map toggle clicked'); // Debug log
+            
+            const mapContainer = this.nextElementSibling;
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
             const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
             
             // Toggle aria-expanded
-            button.setAttribute('aria-expanded', !isExpanded);
+            this.setAttribute('aria-expanded', String(!isExpanded));
             
-            // Update button text based on new state
-            button.textContent = !isExpanded 
+            // Update button text
+            this.textContent = !isExpanded 
                 ? translations[currentLang].hideMap 
                 : translations[currentLang].showMap;
             
-            // Toggle map visibility
+            // Toggle map container
+            mapContainer.classList.toggle('show');
             mapContainer.style.display = !isExpanded ? 'block' : 'none';
             mapContainer.hidden = isExpanded;
         });
     });
 }
 
-// Make sure this is called when the page loads
+// Ensure the function runs after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing map toggles'); // Debug log
     initMapToggles();
     
     // Initialize map containers to be hidden
