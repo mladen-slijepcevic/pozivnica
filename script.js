@@ -91,7 +91,7 @@ const translations = {
         rsvpSuccess: "Hvala na odgovoru! Vaša potvrda je uspešno primljena.",
         rsvpError: "Došlo je do greške. Molimo pokušajte ponovo.",
         rsvpDeadline: "Molim Vas da potvrdite dolazak do 1. maja.",
-        attendYes: "Radosno prihvatam",
+        attendYes: "Dolazim",
         attendNo: "Nažalost ne mogu"
     }
 };
@@ -341,16 +341,20 @@ document.addEventListener('DOMContentLoaded', initGallery);
 
 function initMapToggles() {
     const mapButtons = document.querySelectorAll('.map-toggle');
+    const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
     
     mapButtons.forEach(button => {
         // Remove any existing listeners to prevent duplicates
         const newButton = button.cloneNode(true);
         button.parentNode.replaceChild(newButton, button);
         
+        // Set initial text based on current state
+        const isExpanded = newButton.getAttribute('aria-expanded') === 'true';
+        newButton.textContent = isExpanded 
+            ? translations[currentLang].hideMap 
+            : translations[currentLang].showMap;
+        
         newButton.addEventListener('click', function() {
-            console.log('Map toggle clicked'); // Debug log
-            
-            const mapContainer = this.nextElementSibling;
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
             const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
             
@@ -363,6 +367,7 @@ function initMapToggles() {
                 : translations[currentLang].showMap;
             
             // Toggle map container
+            const mapContainer = this.nextElementSibling;
             mapContainer.classList.toggle('show');
             mapContainer.style.display = !isExpanded ? 'block' : 'none';
             mapContainer.hidden = isExpanded;

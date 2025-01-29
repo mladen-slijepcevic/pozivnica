@@ -1243,17 +1243,11 @@ button,
 }
 
 .deadline-text {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
     text-align: center;
+    color: #666;
+    font-size: 0.9rem;
     font-style: italic;
-}
-
-.deadline-text::before {
-    content: "*";
-    color: #c62828;
-    margin-right: 4px;
 }
 
 /* Attendance options */
