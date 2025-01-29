@@ -1259,3 +1259,96 @@ button,
     color: #c62828;
     margin-right: 4px;
 }
+
+/* Attendance options */
+.attendance-options {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.attendance-choice {
+    flex: 1;
+}
+
+.attendance-choice input[type="radio"] {
+    display: none;
+}
+
+.attendance-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    height: 100%;
+}
+
+.attendance-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Yes icon */
+.attendance-choice:first-child .attendance-icon {
+    color: #4CAF50;
+}
+
+/* No icon */
+.attendance-choice:last-child .attendance-icon {
+    color: #FF5252;
+}
+
+.attendance-text {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Hover state */
+.attendance-card:hover {
+    border-color: #9e9e9e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Selected state */
+input[type="radio"]:checked + .attendance-card {
+    border-color: #4CAF50;
+    background-color: #f8fff8;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+input[type="radio"]:checked + .attendance-card .attendance-text {
+    font-weight: 600;
+}
+
+/* No option selected state */
+input[value="no"]:checked + .attendance-card {
+    border-color: #FF5252;
+    background-color: #fff8f8;
+    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.2);
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+    .attendance-options {
+        flex-direction: column;
+    }
+    
+    .attendance-card {
+        padding: 1rem;
+    }
+    
+    .attendance-icon {
+        font-size: 1.5rem;
+    }
+    
+    .attendance-text {
+        font-size: 1rem;
+    }
+}

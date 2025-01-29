@@ -50,7 +50,9 @@ const translations = {
         countdownTitle: "Time until we celebrate:",
         rsvpSuccess: "Thank you for your response! We have received your RSVP.",
         rsvpError: "Sorry, there was an error sending your RSVP. Please try again.",
-        rsvpDeadline: "Please confirm your attendance by May 1st."
+        rsvpDeadline: "Please confirm your attendance by May 1st.",
+        attendYes: "Joyfully Accept",
+        attendNo: "Regretfully Decline"
     },
     sr: {
         preTitle: "Venčanje",
@@ -86,7 +88,9 @@ const translations = {
         countdownTitle: "Vreme do proslave:",
         rsvpSuccess: "Hvala na odgovoru! Vaša potvrda je uspešno primljena.",
         rsvpError: "Došlo je do greške. Molimo pokušajte ponovo.",
-        rsvpDeadline: "Molim Vas da potvrdite dolazak do 1. maja."
+        rsvpDeadline: "Molim Vas da potvrdite dolazak do 1. maja.",
+        attendYes: "Radosno prihvatam",
+        attendNo: "Nažalost ne mogu"
     }
 };
 
@@ -215,6 +219,12 @@ function setLanguage(lang) {
 
     // Update countdown title
     document.querySelector('.countdown-section .countdown-title').textContent = translations[lang].countdownTitle;
+
+    // Update attendance cards
+    document.querySelector('label[for="attend-yes"] .attendance-text').textContent = 
+        translations[lang].attendYes;
+    document.querySelector('label[for="attend-no"] .attendance-text').textContent = 
+        translations[lang].attendNo;
 
     // Reinitialize map toggles after language change
     initMapToggles();

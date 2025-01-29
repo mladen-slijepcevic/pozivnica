@@ -170,12 +170,22 @@
             <div class="form-group">
                 <input type="email" id="email" required placeholder="Your Email">
             </div>
-            <div class="form-group">
-                <select id="attendance" required>
-                    <option value="">Will you attend?</option>
-                    <option value="yes">Joyfully Accepts</option>
-                    <option value="no">Regretfully Declines</option>
-                </select>
+            <div class="form-group attendance-options">
+                <div class="attendance-choice">
+                    <input type="radio" id="attend-yes" name="attendance" value="yes" required>
+                    <label for="attend-yes" class="attendance-card">
+                        <span class="attendance-icon">✓</span>
+                        <span class="attendance-text">Radosno prihvatam</span>
+                    </label>
+                </div>
+                
+                <div class="attendance-choice">
+                    <input type="radio" id="attend-no" name="attendance" value="no" required>
+                    <label for="attend-no" class="attendance-card">
+                        <span class="attendance-icon">✗</span>
+                        <span class="attendance-text">Nažalost ne mogu</span>
+                    </label>
+                </div>
             </div>
             <div class="form-group">
                 <input type="number" id="guests" placeholder="Number of Guests" min="0" max="5">
