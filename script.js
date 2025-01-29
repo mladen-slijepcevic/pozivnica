@@ -49,7 +49,8 @@ const translations = {
         addToIphoneCalendar: "Add to iPhone Calendar",
         countdownTitle: "Time until we celebrate:",
         rsvpSuccess: "Thank you for your response! We have received your RSVP.",
-        rsvpError: "Sorry, there was an error sending your RSVP. Please try again."
+        rsvpError: "Sorry, there was an error sending your RSVP. Please try again.",
+        rsvpDeadline: "Please confirm your attendance by May 1st."
     },
     sr: {
         preTitle: "Venčanje",
@@ -68,7 +69,7 @@ const translations = {
         joyfullyAccepts: "Radosno prihvatam",
         regretfullyDeclines: "Nažalost ne mogu",
         numberOfGuests: "Broj gostiju",
-        sendRsvp: "Pošalji potvrdu",
+        sendRsvp: "Pošalji odgovor",
         getDirections: "Prikaži lokaciju",
         days: "Dana",
         hours: "Sati",
@@ -84,7 +85,8 @@ const translations = {
         addToIphoneCalendar: "Dodaj u iPhone Kalendar",
         countdownTitle: "Vreme do proslave:",
         rsvpSuccess: "Hvala na odgovoru! Vaša potvrda je uspešno primljena.",
-        rsvpError: "Došlo je do greške. Molimo pokušajte ponovo."
+        rsvpError: "Došlo je do greške. Molimo pokušajte ponovo.",
+        rsvpDeadline: "Molim Vas da potvrdite dolazak do 1. maja."
     }
 };
 
@@ -150,7 +152,9 @@ function setLanguage(lang) {
     attendanceSelect.options[2].text = translations[lang].regretfullyDeclines;
     
     document.querySelector('#guests').placeholder = translations[lang].numberOfGuests;
+    document.querySelector('#rsvp h2').textContent = translations[lang].rsvp;
     document.querySelector('#rsvp button').textContent = translations[lang].sendRsvp;
+    document.querySelector('#rsvp .deadline-text').textContent = translations[lang].rsvpDeadline;
     
     // Update timeline
     document.querySelectorAll('.event h3').forEach(el => {
