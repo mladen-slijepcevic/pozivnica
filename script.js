@@ -133,18 +133,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const langButtons = document.querySelectorAll('.lang-btn');
     
     langButtons.forEach(button => {
+        // Remove any existing listeners to prevent duplicates
         const newButton = removeExistingListeners(button);
         
-        const handleLanguageChange = createButtonHandler(function() {
-            const lang = this.dataset.lang;
+        const handleLanguageChange = createButtonHandler(function(event) {
+            event.stopPropagation();
+            
+            // Remove active class from all buttons
             langButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
             this.classList.add('active');
-            setLanguage(lang);
+            
+            // Set new language
+            const newLang = this.dataset.lang;
+            setLanguage(newLang);
+            
+            return true; // Allow default button behavior
         });
 
-        // Add both touch and click events
-        newButton.addEventListener('touchstart', handleLanguageChange, { passive: false });
-        newButton.addEventListener('click', handleLanguageChange);
+        // Add listeners with capture phase
+        newButton.addEventListener('click', handleLanguageChange, { 
+            capture: true 
+        });
+    });
+
+    // Set initial language and active state
+    const initialLang = localStorage.getItem('preferredLanguage') || 'sr';
+    setLanguage(initialLang);
+    langButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.lang === initialLang) {
+            btn.classList.add('active');
+        }
     });
 
     // Calendar button handling
