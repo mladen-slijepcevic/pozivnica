@@ -490,21 +490,60 @@ function generateCalendarEvent() {
 }
 
 function addToGoogleCalendar(event) {
+    if (!event || !event.startDate || !event.endDate || !event.title) {
+        console.error('Invalid event data provided');
+        return;
+    }
+
     try {
-        const baseUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
-        const dates = `${event.startDate}/${event.endDate}`.replace(/[-:]/g, '');
+        const baseUrl = 'https://calendar.google.com/calendar/render';
         
+        // Format dates with timezone consideration
+        const startDate = new Date(event.startDate)
+            .toISOString()
+            .replace(/[-:]/g, '')
+            .replace(/\.\d{3}/, '');
+        const endDate = new Date(event.endDate)
+            .toISOString()
+            .replace(/[-:]/g, '')
+            .replace(/\.\d{3}/, '');
+        const dates = `${startDate}/${endDate}`;
+        
+        // Add agenda view and other parameters
         const params = new URLSearchParams({
+            action: 'TEMPLATE',
             text: event.title,
             details: event.description,
             location: event.location,
             dates: dates,
-            reminders: 'POPUP,10080'
-        });
+            ctz: Intl.DateTimeFormat().resolvedOptions().timeZone, // Add timezone
+            mode: 'AGENDA',  // Set agenda view
+            pli: 1,         // Include this event only
+            sf: true,       // Show event form
+            output: 'xml'   // Better compatibility
+        }).toString();
 
-        window.open(`${baseUrl}&${params.toString()}`, '_blank');
+        // Open in new window with proper security attributes
+        const calendarWindow = window.open(
+            `${baseUrl}?${params}`,
+            '_blank',
+            'noopener,noreferrer'
+        );
+
+        // Fallback if window.open is blocked
+        if (calendarWindow === null) {
+            const link = document.createElement('a');
+            link.href = `${baseUrl}?${params}`;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     } catch (error) {
         console.error('Error opening Google Calendar:', error);
+        const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
+        alert(translations[currentLang].calendarError || 'Error opening calendar');
     }
 }
 
