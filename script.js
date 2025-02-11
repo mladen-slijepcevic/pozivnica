@@ -876,33 +876,33 @@ function initFormOptimizations() {
     });
 }
 
+// Countdown Timer
 function updateCountdown() {
-    const weddingDate = new Date('2025-05-31T14:15:00');
+    const weddingDate = new Date('2025-05-31T14:15:00+02:00'); // Add timezone offset
     const now = new Date();
     const diff = weddingDate - now;
 
-    if (diff <= 0) {
-        // Wedding day has passed
-        document.querySelectorAll('.countdown-number').forEach(el => {
-            el.textContent = '00';
-        });
+    // If wedding has passed
+    if (diff < 0) {
+        document.querySelector('.countdown-container').innerHTML = '<div class="countdown-passed">Slavlje je počelo! 🎉</div>';
         return;
     }
 
+    // Calculate time units
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    // Update countdown numbers
-    document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
-    document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
-    document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
-    document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+    // Update DOM
+    document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
+    document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
 }
 
 // Initialize countdown
 document.addEventListener('DOMContentLoaded', () => {
-    updateCountdown(); // Initial update
-    setInterval(updateCountdown, 1000); // Update every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 });
