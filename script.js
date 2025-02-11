@@ -65,7 +65,7 @@ const translations = {
         asWeJoin: "dok stupamo u brak",
         churchCeremony: "Crkveno venčanje",
         guestGathering: "Skup svatova",
-        weddingCelebration: "Gradjansko venčanje",
+        weddingCelebration: "Građansko venčanje",
         rsvp: "Potvrda dolaska",
         yourName: "Vaše ime",
         yourEmail: "Vaš email",
@@ -163,10 +163,21 @@ function setLanguage(lang) {
     document.querySelector('#rsvp .deadline-text').textContent = translations[lang].rsvpDeadline;
     
     // Update timeline
-    document.querySelectorAll('.event h3').forEach(el => {
-        if(el.textContent.includes('Church')) el.textContent = translations[lang].churchCeremony;
-        if(el.textContent.includes('Guest')) el.textContent = translations[lang].guestGathering;
-        if(el.textContent.includes('Wedding')) el.textContent = translations[lang].weddingCelebration;
+    const timelineEvents = document.querySelectorAll('.timeline-item .event h3, .event h3, .timeline h3');
+    console.log('Found timeline events:', timelineEvents.length); // Debug log
+    
+    timelineEvents.forEach(el => {
+        console.log('Current event text:', el.textContent); // Debug log
+        const currentText = el.textContent.trim().toLowerCase();
+        
+        if (currentText.includes('church') || currentText.includes('crkveno')) {
+            el.textContent = translations[lang].churchCeremony;
+        } else if (currentText.includes('guest') || currentText.includes('skup')) {
+            el.textContent = translations[lang].guestGathering;
+        } else if (currentText.includes('wedding') || currentText.includes('građansko')) {
+            el.textContent = translations[lang].weddingCelebration;
+        }
+        console.log('Updated to:', el.textContent); // Debug log
     });
     
     // Update countdown labels
