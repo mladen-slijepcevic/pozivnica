@@ -1342,3 +1342,46 @@ input[value="no"]:checked + .attendance-card {
         font-size: 1rem;
     }
 }
+
+/* Mobile touch optimizations */
+@media (max-width: 768px) {
+    .lang-btn,
+    .calendar-btn,
+    .map-toggle,
+    .directions-btn {
+        min-height: 44px; /* Minimum touch target size */
+        min-width: 44px;
+        padding: 12px 20px;
+        margin: 8px 4px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+
+    /* Prevent text selection during touch */
+    button {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    /* Add active state for touch feedback */
+    .lang-btn:active,
+    .calendar-btn:active,
+    .map-toggle:active,
+    .directions-btn:active {
+        background-color: #34495e;
+        transform: translateY(1px);
+        transition: none;
+    }
+
+    /* Disable hover effects on mobile */
+    @media (hover: none) {
+        .lang-btn:hover,
+        .calendar-btn:hover,
+        .map-toggle:hover,
+        .directions-btn:hover {
+            transform: none;
+            box-shadow: none;
+        }
+    }
+}

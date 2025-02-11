@@ -96,43 +96,91 @@ const translations = {
     }
 };
 
+// Utility function to create touch/click handler
+function createButtonHandler(callback, debounceTime = 300) {
+    let lastClick = 0;
+    
+    return function(event) {
+        event.preventDefault();
+        
+        // Prevent double triggers
+        const now = Date.now();
+        if (now - lastClick < debounceTime) {
+            return;
+        }
+        lastClick = now;
+        
+        callback.call(this, event);
+    };
+}
+
 // Main initialization
 document.addEventListener('DOMContentLoaded', () => {
     // Language button handling
     const langButtons = document.querySelectorAll('.lang-btn');
+    
     langButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const lang = button.dataset.lang;
-            setLanguage(lang);
+        const newButton = removeExistingListeners(button);
+        
+        const handleLanguageChange = createButtonHandler(function() {
+            const lang = this.dataset.lang;
             langButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            this.classList.add('active');
+            setLanguage(lang);
         });
+
+        // Add both touch and click events
+        newButton.addEventListener('touchstart', handleLanguageChange, { passive: false });
+        newButton.addEventListener('click', handleLanguageChange);
     });
 
-    // Initialize countdown
-    function updateCountdown() {
-        const weddingDate = new Date(2025, 4, 31, 14, 15);
-        const now = new Date();
-        const diff = weddingDate - now;
+    // Calendar button handling
+    document.querySelectorAll('.calendar-btn').forEach(button => {
+        const newButton = removeExistingListeners(button);
         
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const handleCalendarClick = createButtonHandler(function() {
+            const event = generateCalendarEvent();
+            if (this.dataset.calendar === 'google') {
+                addToGoogleCalendar(event);
+            } else if (this.dataset.calendar === 'ical') {
+                generateICSFile(event);
+            }
+        });
 
-        const elements = {
-            days: document.getElementById('countdown-days'),
-            hours: document.getElementById('countdown-hours'),
-            minutes: document.getElementById('countdown-minutes')
-        };
+        newButton.addEventListener('touchstart', handleCalendarClick, { passive: false });
+        newButton.addEventListener('click', handleCalendarClick);
+    });
 
-        if (elements.days) elements.days.textContent = days.toString().padStart(2, '0');
-        if (elements.hours) elements.hours.textContent = hours.toString().padStart(2, '0');
-        if (elements.minutes) elements.minutes.textContent = minutes.toString().padStart(2, '0');
-    }
+    // Map toggle handling
+    const mapButtons = document.querySelectorAll('.map-toggle');
+    mapButtons.forEach(button => {
+        const newButton = removeExistingListeners(button);
+        
+        const handleMapToggle = createButtonHandler(function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
+            
+            this.setAttribute('aria-expanded', !isExpanded);
+            this.textContent = !isExpanded 
+                ? translations[currentLang].hideMap 
+                : translations[currentLang].showMap;
+            
+            const mapContainer = this.nextElementSibling;
+            if (mapContainer) {
+                mapContainer.classList.toggle('show');
+                mapContainer.style.display = !isExpanded ? 'block' : 'none';
+                mapContainer.hidden = isExpanded;
+            }
+        });
 
-    // Start countdown
-    updateCountdown();
-    setInterval(updateCountdown, 60000);
+        newButton.addEventListener('touchstart', handleMapToggle, { passive: false });
+        newButton.addEventListener('click', handleMapToggle);
+    });
+
+    // Set initial language
+    const savedLang = localStorage.getItem('preferredLanguage') || 'sr';
+    setLanguage(savedLang);
+    document.querySelector(`[data-lang="${savedLang}"]`)?.classList.add('active');
 
     // Initialize other features
     handleTimelineAnimation();
@@ -355,9 +403,7 @@ function initMapToggles() {
     const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
     
     mapButtons.forEach(button => {
-        // Remove any existing listeners to prevent duplicates
-        const newButton = button.cloneNode(true);
-        button.parentNode.replaceChild(newButton, button);
+        const newButton = removeExistingListeners(button);
         
         // Set initial text based on current state
         const isExpanded = newButton.getAttribute('aria-expanded') === 'true';
@@ -369,15 +415,11 @@ function initMapToggles() {
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
             const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
             
-            // Toggle aria-expanded
-            this.setAttribute('aria-expanded', String(!isExpanded));
-            
-            // Update button text
+            this.setAttribute('aria-expanded', !isExpanded);
             this.textContent = !isExpanded 
                 ? translations[currentLang].hideMap 
                 : translations[currentLang].showMap;
             
-            // Toggle map container
             const mapContainer = this.nextElementSibling;
             mapContainer.classList.toggle('show');
             mapContainer.style.display = !isExpanded ? 'block' : 'none';
@@ -545,3 +587,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('RSVP form not found!'); // Debug log
     }
 });
+
+// Remove existing listeners helper
+function removeExistingListeners(element) {
+    const newElement = element.cloneNode(true);
+    element.parentNode.replaceChild(newElement, element);
+    return newElement;
+}
