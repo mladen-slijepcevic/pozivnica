@@ -99,18 +99,31 @@ const translations = {
 // Utility function to create touch/click handler
 function createButtonHandler(callback, debounceTime = 300) {
     let lastClick = 0;
+    let isProcessing = false;
     
     return function(event) {
-        event.preventDefault();
-        
-        // Prevent double triggers
+        // Stop if we're already processing or it's too soon since last click
         const now = Date.now();
-        if (now - lastClick < debounceTime) {
+        if (isProcessing || now - lastClick < debounceTime) {
+            event.preventDefault();
             return;
         }
+
         lastClick = now;
-        
-        callback.call(this, event);
+        isProcessing = true;
+
+        try {
+            // Call the callback and prevent default only if needed
+            const result = callback.call(this, event);
+            if (result !== false) {
+                event.preventDefault();
+            }
+        } finally {
+            // Always reset processing flag
+            setTimeout(() => {
+                isProcessing = false;
+            }, 100);
+        }
     };
 }
 
@@ -138,17 +151,26 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.calendar-btn').forEach(button => {
         const newButton = removeExistingListeners(button);
         
-        const handleCalendarClick = createButtonHandler(function() {
+        const handleCalendarClick = createButtonHandler(function(event) {
+            event.stopPropagation(); // Stop event bubbling
+            
             const event = generateCalendarEvent();
             if (this.dataset.calendar === 'google') {
                 addToGoogleCalendar(event);
             } else if (this.dataset.calendar === 'ical') {
                 generateICSFile(event);
             }
+            return false; // Don't prevent default as we need link navigation
         });
 
-        newButton.addEventListener('touchstart', handleCalendarClick, { passive: false });
-        newButton.addEventListener('click', handleCalendarClick);
+        // Add listeners with capture phase to ensure they run first
+        newButton.addEventListener('touchstart', handleCalendarClick, { 
+            passive: false, 
+            capture: true 
+        });
+        newButton.addEventListener('click', handleCalendarClick, { 
+            capture: true 
+        });
     });
 
     // Map toggle handling
@@ -156,7 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
     mapButtons.forEach(button => {
         const newButton = removeExistingListeners(button);
         
-        const handleMapToggle = createButtonHandler(function() {
+        const handleMapToggle = createButtonHandler(function(event) {
+            event.stopPropagation(); // Stop event bubbling
+            
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
             const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
             
@@ -173,8 +197,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        newButton.addEventListener('touchstart', handleMapToggle, { passive: false });
-        newButton.addEventListener('click', handleMapToggle);
+        newButton.addEventListener('touchstart', handleMapToggle, { 
+            passive: false, 
+            capture: true 
+        });
+        newButton.addEventListener('click', handleMapToggle, { 
+            capture: true 
+        });
     });
 
     // Set initial language
@@ -264,7 +293,7 @@ function setLanguage(lang) {
             : translations[lang].showMap;
     });
 
-    // Update calendar buttons - with null check
+    // Update calendar buttons
     document.querySelectorAll('.calendar-btn').forEach(btn => {
         if (btn.dataset.calendar === 'google') {
             btn.textContent = translations[lang].addToGoogleCalendar;
@@ -456,18 +485,22 @@ function generateCalendarEvent() {
 }
 
 function addToGoogleCalendar(event) {
-    const baseUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
-    const dates = `${event.startDate}/${event.endDate}`.replace(/[-:]/g, '');
-    
-    const params = new URLSearchParams({
-        text: event.title,
-        details: event.description,
-        location: event.location,
-        dates: dates,
-        reminders: 'POPUP,10080' // 7 days in minutes (7 * 24 * 60 = 10080)
-    });
+    try {
+        const baseUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+        const dates = `${event.startDate}/${event.endDate}`.replace(/[-:]/g, '');
+        
+        const params = new URLSearchParams({
+            text: event.title,
+            details: event.description,
+            location: event.location,
+            dates: dates,
+            reminders: 'POPUP,10080'
+        });
 
-    window.open(`${baseUrl}&${params.toString()}`, '_blank');
+        window.open(`${baseUrl}&${params.toString()}`, '_blank');
+    } catch (error) {
+        console.error('Error opening Google Calendar:', error);
+    }
 }
 
 function generateICSFile(event) {
@@ -487,13 +520,18 @@ END:VALARM
 END:VEVENT
 END:VCALENDAR`;
 
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'vencanje_jovanka_mladen.ics';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'vencanje_jovanka_mladen.ics';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(link.href); // Clean up
+    } catch (error) {
+        console.error('Error generating ICS file:', error);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
