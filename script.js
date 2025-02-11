@@ -377,6 +377,27 @@ function initGallery() {
                 break;
         }
     });
+
+    // Add touch support for gallery
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diffX = touchStartX - touchEndX;
+        
+        if (Math.abs(diffX) > 50) { // Minimum swipe distance
+            if (diffX > 0) {
+                showNext();
+            } else {
+                showPrev();
+            }
+        }
+    }, { passive: true });
 }
 
 // Initialize gallery when the page loads
@@ -384,22 +405,27 @@ document.addEventListener('DOMContentLoaded', initGallery);
 
 function initMapToggles() {
     const mapButtons = document.querySelectorAll('.map-toggle');
-    const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
     
     mapButtons.forEach(button => {
         const mapContainer = button.nextElementSibling;
-        if (!mapContainer || !mapContainer.classList.contains('map-container')) {
-            console.error('Invalid map container structure');
-            return;
-        }
-
-        // Reset initial state
-        const isExpanded = button.getAttribute('aria-expanded') === 'true';
-        mapContainer.style.display = isExpanded ? 'block' : 'none';
-        mapContainer.hidden = !isExpanded;
-        button.textContent = isExpanded ? 
-            translations[currentLang].hideMap : 
-            translations[currentLang].showMap;
+        if (!mapContainer?.classList.contains('map-container')) return;
+        
+        // Load map iframe only when needed
+        button.addEventListener('click', () => {
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            
+            if (!isExpanded && !mapContainer.querySelector('iframe')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = mapContainer.dataset.src;
+                iframe.loading = 'lazy';
+                iframe.title = 'Location map';
+                mapContainer.appendChild(iframe);
+            }
+            
+            mapContainer.style.display = isExpanded ? 'none' : 'block';
+            mapContainer.hidden = isExpanded;
+            button.setAttribute('aria-expanded', !isExpanded);
+        }, { passive: true });
     });
 }
 
@@ -620,4 +646,103 @@ function removeExistingListeners(element) {
     const newElement = element.cloneNode(true);
     element.parentNode.replaceChild(newElement, element);
     return newElement;
+}
+
+// Debounce scroll and resize events
+function debounce(func, wait = 100) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Optimize scroll performance
+const handleScroll = debounce(() => {
+    requestAnimationFrame(() => {
+        // Your scroll handling code
+    });
+}, 100);
+
+window.addEventListener('scroll', handleScroll, { passive: true });
+
+// Lazy load images
+function lazyLoadImages() {
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+
+    images.forEach(img => imageObserver.observe(img));
+}
+
+// Remove 300ms tap delay on mobile
+function removeTapDelay() {
+    const touchElements = document.querySelectorAll('button, a, .gallery-item, .map-toggle');
+    touchElements.forEach(element => {
+        element.style.touchAction = 'manipulation';
+    });
+}
+
+// Initialize mobile optimizations
+document.addEventListener('DOMContentLoaded', () => {
+    removeTapDelay();
+    lazyLoadImages();
+    
+    // Add viewport height fix for mobile browsers
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    
+    window.addEventListener('resize', debounce(() => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }, 100));
+});
+
+function initFormOptimizations() {
+    const inputs = document.querySelectorAll('input, textarea');
+    
+    inputs.forEach(input => {
+        // Prevent zoom on focus in iOS
+        input.style.fontSize = '16px';
+        
+        // Add blur on submit for mobile keyboards
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !input.matches('textarea')) {
+                input.blur();
+            }
+        });
+        
+        // Clear field button for mobile
+        if (input.type === 'text' || input.type === 'email') {
+            const clearButton = document.createElement('button');
+            clearButton.type = 'button';
+            clearButton.className = 'clear-field';
+            clearButton.setAttribute('aria-label', 'Clear field');
+            clearButton.style.display = 'none';
+            
+            input.parentNode.insertBefore(clearButton, input.nextSibling);
+            
+            input.addEventListener('input', () => {
+                clearButton.style.display = input.value ? 'block' : 'none';
+            });
+            
+            clearButton.addEventListener('click', () => {
+                input.value = '';
+                clearButton.style.display = 'none';
+                input.focus();
+            });
+        }
+    });
 }
