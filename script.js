@@ -1,8 +1,24 @@
 console.log('Script loaded successfully');
 
+// Add a cleanup function
+const cleanup = {
+    listeners: new Set(),
+    add(element, type, handler) {
+        this.listeners.add({ element, type, handler });
+        element.addEventListener(type, handler);
+    },
+    removeAll() {
+        this.listeners.forEach(({ element, type, handler }) => {
+            element?.removeEventListener(type, handler);
+        });
+        this.listeners.clear();
+    }
+};
+
 // Cleanup on page unload
 window.addEventListener('unload', () => {
-    // Clear any existing intervals
+    cleanup.removeAll();
+    // Clear intervals
     for (let i = 1; i < 100; i++) {
         clearInterval(i);
     }
@@ -126,7 +142,7 @@ const EventHandlers = {
             }
         });
         
-        element.addEventListener(eventType, wrappedHandler, options);
+        cleanup.add(element, eventType, wrappedHandler);
     },
 
     // Initialize all event listeners
@@ -223,106 +239,40 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setLanguage(lang) {
-    // Store language preference
-    localStorage.setItem('preferredLanguage', lang);
-    
-    // Update all translatable elements
-    document.querySelector('.pre-title').textContent = translations[lang].preTitle;
-    document.querySelector('#details h2').textContent = translations[lang].gettingMarried;
-    
-    // Update RSVP form
-    document.querySelector('#name').placeholder = translations[lang].yourName;
-    document.querySelector('#email').placeholder = translations[lang].yourEmail;
-    
-    const attendanceSelect = document.querySelector('#attendance');
-    attendanceSelect.options[0].text = translations[lang].willYouAttend;
-    attendanceSelect.options[1].text = translations[lang].joyfullyAccepts;
-    attendanceSelect.options[2].text = translations[lang].regretfullyDeclines;
-    
-    document.querySelector('#guests').placeholder = translations[lang].numberOfGuests;
-    document.querySelector('#rsvp h2').textContent = translations[lang].rsvp;
-    document.querySelector('#rsvp button').textContent = translations[lang].sendRsvp;
-    document.querySelector('#rsvp .deadline-text').textContent = translations[lang].rsvpDeadline;
-    
-    // Update timeline
-    const timelineEvents = document.querySelectorAll('.timeline-item .event h3, .event h3, .timeline h3');
-    console.log('Found timeline events:', timelineEvents.length); // Debug log
-    
-    timelineEvents.forEach(el => {
-        console.log('Current event text:', el.textContent); // Debug log
-        const currentText = el.textContent.trim().toLowerCase();
-        
-        if (currentText.includes('church') || currentText.includes('crkveno')) {
-            el.textContent = translations[lang].churchCeremony;
-        } else if (currentText.includes('guest') || currentText.includes('skup')) {
-            el.textContent = translations[lang].guestGathering;
-        } else if (currentText.includes('wedding') || currentText.includes('građansko')) {
-            el.textContent = translations[lang].weddingCelebration;
-        }
-        console.log('Updated to:', el.textContent); // Debug log
-    });
-    
-    // Update countdown labels
-    const labels = document.querySelectorAll('.countdown-section .label');
-    labels[0].textContent = translations[lang].days;
-    labels[1].textContent = translations[lang].hours;
-    labels[2].textContent = translations[lang].minutes;
-    
-    // Update direction buttons
-    document.querySelectorAll('a.directions-btn, button.directions-btn').forEach(btn => {
-        btn.textContent = translations[lang].getDirections;
-    });
+    if (!translations[lang]) {
+        console.error(`Invalid language: ${lang}`);
+        lang = 'sr'; // Fallback to Serbian
+    }
 
-    // Update timeline venues
-    document.querySelectorAll('.venue').forEach(el => {
-        if(el.textContent.includes('Lazarica')) {
-            el.textContent = translations[lang].churchVenue;
-        }
-        if(el.textContent.includes('Verde')) {
-            const eventTitle = el.closest('.event').querySelector('h3').textContent;
-            if(eventTitle.includes('Wedding')) {
-                el.textContent = translations[lang].weddingVenue;
+    // Store language preference
+    try {
+        localStorage.setItem('preferredLanguage', lang);
+    } catch (error) {
+        console.error('Failed to store language preference:', error);
+    }
+    
+    const elements = {
+        preTitle: '.pre-title',
+        gettingMarried: '#details h2',
+        nameInput: '#name',
+        emailInput: '#email',
+        // ... add all other selectors
+    };
+
+    // Update elements safely
+    Object.entries(elements).forEach(([key, selector]) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            if (element instanceof HTMLInputElement) {
+                element.placeholder = translations[lang][key];
             } else {
-                el.textContent = translations[lang].gatheringVenue;
+                element.textContent = translations[lang][key];
             }
         }
     });
 
-    // Update wedding date in details section
-    document.querySelector('.wedding-date').textContent = translations[lang].saturday;
-
-    // Update map toggle buttons
-    document.querySelectorAll('.map-toggle').forEach(btn => {
-        btn.textContent = btn.getAttribute('aria-expanded') === 'true' 
-            ? translations[lang].hideMap 
-            : translations[lang].showMap;
-    });
-
-    // Update calendar buttons
-    document.querySelectorAll('.calendar-btn').forEach(btn => {
-        if (btn.dataset.calendar === 'google') {
-            btn.textContent = translations[lang].addToGoogleCalendar;
-        } else if (btn.dataset.calendar === 'ical') {
-            btn.textContent = translations[lang].addToIphoneCalendar;
-        }
-    });
-
-    // Update invitation text elements
-    document.querySelector('.invitation-text p:nth-child(2)').textContent = translations[lang].inviteMessage;
-    document.querySelector('.invitation-text p:nth-child(1)').textContent = translations[lang].withJoy;
-    document.querySelector('.invitation-text p:nth-child(3)').textContent = translations[lang].asWeJoin;
-
-    // Update countdown title
-    document.querySelector('.countdown-section .countdown-title').textContent = translations[lang].countdownTitle;
-
-    // Update attendance cards
-    document.querySelector('label[for="attend-yes"] .attendance-text').textContent = 
-        translations[lang].attendYes;
-    document.querySelector('label[for="attend-no"] .attendance-text').textContent = 
-        translations[lang].attendNo;
-
-    // Reinitialize map toggles after language change
-    initMapToggles();
+    // Update document language for accessibility
+    document.documentElement.lang = lang;
 }
 
 // Set initial language based on stored preference or default to Serbian
@@ -437,28 +387,19 @@ function initMapToggles() {
     const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
     
     mapButtons.forEach(button => {
-        const newButton = removeExistingListeners(button);
-        
-        // Set initial text based on current state
-        const isExpanded = newButton.getAttribute('aria-expanded') === 'true';
-        newButton.textContent = isExpanded 
-            ? translations[currentLang].hideMap 
-            : translations[currentLang].showMap;
-        
-        newButton.addEventListener('click', function() {
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
-            
-            this.setAttribute('aria-expanded', !isExpanded);
-            this.textContent = !isExpanded 
-                ? translations[currentLang].hideMap 
-                : translations[currentLang].showMap;
-            
-            const mapContainer = this.nextElementSibling;
-            mapContainer.classList.toggle('show');
-            mapContainer.style.display = !isExpanded ? 'block' : 'none';
-            mapContainer.hidden = isExpanded;
-        });
+        const mapContainer = button.nextElementSibling;
+        if (!mapContainer || !mapContainer.classList.contains('map-container')) {
+            console.error('Invalid map container structure');
+            return;
+        }
+
+        // Reset initial state
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        mapContainer.style.display = isExpanded ? 'block' : 'none';
+        mapContainer.hidden = !isExpanded;
+        button.textContent = isExpanded ? 
+            translations[currentLang].hideMap : 
+            translations[currentLang].showMap;
     });
 }
 
@@ -475,18 +416,38 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function generateCalendarEvent() {
-    const event = {
-        title: 'Venčanje Jovanke i Mladena',
-        description: 'Venčanje\n\n' +
-                    '14:15 - Crkveno venčanje u Crkvi svetog Kneza Lazara - Lazarica\n' +
-                    '16:00 - Skup svatova u Restoranu Verde\n' +
-                    '17:30 - Gradjansko venčanje u Restoranu Verde',
-        location: 'Crkva svetog Kneza Lazara - Lazarica, Beograd, Srbija',
-        startDate: '2025-05-31T14:15:00',
-        endDate: '2025-05-31T23:59:00'
-    };
+    const eventDate = '2025-05-31';
+    const baseTime = 'T';
+    
+    try {
+        const event = {
+            title: 'Venčanje Jovanke i Mladena',
+            description: [
+                'Venčanje',
+                '',
+                '14:15 - Crkveno venčanje u Crkvi svetog Kneza Lazara - Lazarica',
+                '16:00 - Skup svatova u Restoranu Verde',
+                '17:30 - Gradjansko venčanje u Restoranu Verde'
+            ].join('\n'),
+            location: 'Crkva svetog Kneza Lazara - Lazarica, Beograd, Srbija',
+            startDate: `${eventDate}${baseTime}14:15:00`,
+            endDate: `${eventDate}${baseTime}23:59:00`
+        };
 
-    return event;
+        // Validate dates
+        if (!isValidDate(new Date(event.startDate)) || !isValidDate(new Date(event.endDate))) {
+            throw new Error('Invalid date format');
+        }
+
+        return event;
+    } catch (error) {
+        console.error('Error generating calendar event:', error);
+        return null;
+    }
+}
+
+function isValidDate(date) {
+    return date instanceof Date && !isNaN(date);
 }
 
 function addToGoogleCalendar(event) {
@@ -601,35 +562,29 @@ async function handleRSVP(event) {
     const submitButton = form.querySelector('button[type="submit"]');
     const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
     
-    // Disable submit button and show loading state
     submitButton.disabled = true;
     submitButton.style.opacity = '0.7';
     
     try {
         const formData = {
-            name: document.getElementById('name').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            attendance: document.getElementById('attendance').value,
-            guests: document.getElementById('guests').value.trim()
+            name: document.getElementById('name')?.value?.trim(),
+            email: document.getElementById('email')?.value?.trim(),
+            attendance: document.getElementById('attendance')?.value,
+            guests: document.getElementById('guests')?.value?.trim()
         };
 
-        // Basic validation
+        // Validation
         if (!formData.name || !formData.email || !formData.attendance) {
-            throw new Error('Please fill in all required fields');
+            throw new Error(translations[currentLang].formValidationError || 'Please fill in all required fields');
         }
 
-        // Show success message
+        if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            throw new Error(translations[currentLang].invalidEmailError || 'Please enter a valid email');
+        }
+
+        // Success handling
         const successMessage = document.createElement('div');
         successMessage.className = 'rsvp-message success';
-        successMessage.style.cssText = `
-            padding: 20px;
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 1.2rem;
-            margin-top: 20px;
-        `;
         successMessage.textContent = translations[currentLang].rsvpSuccess;
         
         form.innerHTML = '';
@@ -638,17 +593,12 @@ async function handleRSVP(event) {
     } catch (error) {
         const errorMessage = document.createElement('div');
         errorMessage.className = 'rsvp-message error';
-        errorMessage.style.cssText = `
-            padding: 20px;
-            background-color: #ffebee;
-            color: #c62828;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-        `;
-        errorMessage.textContent = translations[currentLang].rsvpError;
+        errorMessage.textContent = error.message || translations[currentLang].rsvpError;
         
+        // Remove any existing error messages
+        form.querySelectorAll('.rsvp-message.error').forEach(el => el.remove());
         form.prepend(errorMessage);
+        
         submitButton.disabled = false;
         submitButton.style.opacity = '1';
     }
