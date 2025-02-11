@@ -171,24 +171,17 @@
                 <input type="email" id="email" required placeholder="Vaš email">
             </div>
             <div class="form-group attendance-options">
-                <div class="attendance-choice">
-                    <input type="radio" id="attend-yes" name="attendance" value="yes" required>
-                    <label for="attend-yes" class="attendance-card">
-                        <span class="attendance-icon">✓</span>
-                        <span class="attendance-text">Dolazim</span>
-                    </label>
-                </div>
-                
-                <div class="attendance-choice">
-                    <input type="radio" id="attend-no" name="attendance" value="no" required>
-                    <label for="attend-no" class="attendance-card">
-                        <span class="attendance-icon">✗</span>
-                        <span class="attendance-text">Nažalost ne mogu</span>
-                    </label>
-                </div>
+                <label>
+                    <input type="radio" name="attendance" value="yes" required>
+                    <span>Dolazim</span>
+                </label>
+                <label>
+                    <input type="radio" name="attendance" value="no" required>
+                    <span>Nažalost ne mogu</span>
+                </label>
             </div>
-            <div class="form-group">
-                <input type="number" id="guests" placeholder="Broj gostiju" min="0" max="6">
+            <div class="form-group" id="guests-container" style="display: none;">
+                <input type="number" id="guests" min="0" max="5" placeholder="Broj gostiju">
             </div>
             <button type="submit">Pošalji odgovor</button>
         </form>

@@ -56,14 +56,20 @@ const translations = {
         saturday: "Saturday, May 31st 2025",
         showMap: "Show Map",
         hideMap: "Hide Map",
-        addToGoogleCalendar: "Add to Google Calendar",
-        addToIphoneCalendar: "Add to iPhone Calendar",
+        googleCalendar: "Add to Google Calendar",
+        icalCalendar: "Add to iPhone Calendar",
         countdownTitle: "Time until we celebrate:",
         rsvpSuccess: "Thank you for your response! We have received your RSVP.",
         rsvpError: "Sorry, there was an error sending your RSVP. Please try again.",
         rsvpDeadline: "Please confirm your attendance by May 1st.",
         attendYes: "Joyfully Accept",
-        attendNo: "Regretfully Decline"
+        attendNo: "Regretfully Decline",
+        nameRequired: "Please enter your name",
+        emailRequired: "Please enter your email address",
+        invalidEmail: "Please enter a valid email address",
+        attendanceRequired: "Please confirm if you will attend",
+        formValidationError: "Please fill in all required fields",
+        sending: "Sending..."
     },
     sr: {
         pageTitle: "Pozivnica za svadbu",
@@ -95,14 +101,20 @@ const translations = {
         saturday: "Subota, 31. Maj 2025",
         showMap: "Prikaži mapu",
         hideMap: "Sakrij mapu",
-        addToGoogleCalendar: "Dodaj u Google Kalendar",
-        addToIphoneCalendar: "Dodaj u iPhone Kalendar",
+        googleCalendar: "Dodaj u Google Kalendar",
+        icalCalendar: "Dodaj u iPhone Kalendar",
         countdownTitle: "Vreme do proslave:",
         rsvpSuccess: "Hvala na odgovoru! Vaša potvrda je uspešno primljena.",
         rsvpError: "Došlo je do greške. Molimo pokušajte ponovo.",
         rsvpDeadline: "Molim Vas da potvrdite dolazak do 1. maja.",
         attendYes: "Dolazim",
-        attendNo: "Nažalost ne mogu"
+        attendNo: "Nažalost ne mogu",
+        nameRequired: "Molimo vas da unesete vaše ime",
+        emailRequired: "Molimo vas da unesete vašu email adresu",
+        invalidEmail: "Molimo vas da unesete validnu email adresu",
+        attendanceRequired: "Molimo vas da potvrdite da li dolazite",
+        formValidationError: "Molimo vas da popunite sva obavezna polja",
+        sending: "Šalje se..."
     }
 };
 
@@ -256,7 +268,15 @@ function setLanguage(lang) {
         gettingMarried: '#details h2',
         nameInput: '#name',
         emailInput: '#email',
-        // ... add all other selectors
+        // Add calendar button selectors
+        googleCalendar: '[data-calendar="google"]',
+        icalCalendar: '[data-calendar="ical"]',
+        // Add countdown elements
+        countdownTitle: '.countdown-title',
+        countdownDays: '#countdown-days + .label',
+        countdownHours: '#countdown-hours + .label',
+        countdownMinutes: '#countdown-minutes + .label',
+        countdownSeconds: '#countdown-seconds + .label'
     };
 
     // Update elements safely
@@ -588,6 +608,7 @@ async function handleRSVP(event) {
     const submitButton = form.querySelector('button[type="submit"]');
     const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
     
+    // Disable submit button and show loading state
     submitButton.disabled = true;
     submitButton.style.opacity = '0.7';
     
@@ -595,28 +616,45 @@ async function handleRSVP(event) {
         const formData = {
             name: document.getElementById('name')?.value?.trim(),
             email: document.getElementById('email')?.value?.trim(),
-            attendance: document.getElementById('attendance')?.value,
-            guests: document.getElementById('guests')?.value?.trim()
+            attendance: document.querySelector('input[name="attendance"]:checked')?.value,
+            guests: document.getElementById('guests')?.value?.trim() || '0'
         };
 
         // Validation
-        if (!formData.name || !formData.email || !formData.attendance) {
-            throw new Error(translations[currentLang].formValidationError || 'Please fill in all required fields');
+        const errors = [];
+        if (!formData.name) {
+            errors.push(translations[currentLang].nameRequired || 'Ime je obavezno');
+        }
+        if (!formData.email) {
+            errors.push(translations[currentLang].emailRequired || 'Email je obavezan');
+        } else if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            errors.push(translations[currentLang].invalidEmail || 'Email nije validan');
+        }
+        if (!formData.attendance) {
+            errors.push(translations[currentLang].attendanceRequired || 'Molimo vas da potvrdite da li dolazite');
         }
 
-        if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            throw new Error(translations[currentLang].invalidEmailError || 'Please enter a valid email');
+        if (errors.length > 0) {
+            throw new Error(errors.join('\n'));
         }
+
+        // Here you would typically send the data to your server
+        // For now, we'll simulate a successful submission
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network request
 
         // Success handling
         const successMessage = document.createElement('div');
         successMessage.className = 'rsvp-message success';
         successMessage.textContent = translations[currentLang].rsvpSuccess;
         
+        // Clear form and show success message
         form.innerHTML = '';
         form.appendChild(successMessage);
 
+        // Optional: Send confirmation email or update UI further
+        
     } catch (error) {
+        // Error handling
         const errorMessage = document.createElement('div');
         errorMessage.className = 'rsvp-message error';
         errorMessage.textContent = error.message || translations[currentLang].rsvpError;
@@ -625,19 +663,110 @@ async function handleRSVP(event) {
         form.querySelectorAll('.rsvp-message.error').forEach(el => el.remove());
         form.prepend(errorMessage);
         
+        // Re-enable submit button
         submitButton.disabled = false;
         submitButton.style.opacity = '1';
     }
 }
 
+// Add translations for RSVP form
+const translations = {
+    sr: {
+        // ... existing translations ...
+        nameRequired: 'Molimo vas da unesete vaše ime',
+        emailRequired: 'Molimo vas da unesete vašu email adresu',
+        invalidEmail: 'Molimo vas da unesete validnu email adresu',
+        attendanceRequired: 'Molimo vas da potvrdite da li dolazite',
+        rsvpSuccess: 'Hvala na odgovoru! Vaša potvrda je uspešno primljena.',
+        rsvpError: 'Došlo je do greške. Molimo pokušajte ponovo.',
+        formValidationError: 'Molimo vas da popunite sva obavezna polja',
+        sending: 'Šalje se...'
+    },
+    en: {
+        // ... existing translations ...
+        nameRequired: 'Please enter your name',
+        emailRequired: 'Please enter your email address',
+        invalidEmail: 'Please enter a valid email address',
+        attendanceRequired: 'Please confirm if you will attend',
+        rsvpSuccess: 'Thank you for your response! We have received your RSVP.',
+        rsvpError: 'Sorry, there was an error sending your RSVP. Please try again.',
+        formValidationError: 'Please fill in all required fields',
+        sending: 'Sending...'
+    }
+};
+
+// Initialize RSVP form
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded'); // Debug log
     const rsvpForm = document.getElementById('rsvp-form');
     if (rsvpForm) {
-        console.log('RSVP form found, adding listener'); // Debug log
+        // Add real-time validation
+        const inputs = rsvpForm.querySelectorAll('input[required]');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => {
+                validateField(input);
+            });
+            input.addEventListener('input', () => {
+                // Remove error when user starts typing
+                const errorEl = input.parentElement.querySelector('.field-error');
+                if (errorEl) {
+                    errorEl.remove();
+                }
+            });
+        });
+
+        // Handle form submission
         rsvpForm.addEventListener('submit', handleRSVP);
-    } else {
-        console.log('RSVP form not found!'); // Debug log
+    }
+});
+
+// Field validation helper
+function validateField(input) {
+    const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
+    let errorMessage = '';
+
+    if (!input.value.trim()) {
+        errorMessage = translations[currentLang][`${input.id}Required`];
+    } else if (input.type === 'email' && !input.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        errorMessage = translations[currentLang].invalidEmail;
+    }
+
+    // Remove existing error message
+    const existingError = input.parentElement.querySelector('.field-error');
+    if (existingError) {
+        existingError.remove();
+    }
+
+    // Add new error message if needed
+    if (errorMessage) {
+        const errorEl = document.createElement('div');
+        errorEl.className = 'field-error';
+        errorEl.textContent = errorMessage;
+        input.parentElement.appendChild(errorEl);
+        return false;
+    }
+
+    return true;
+}
+
+// Update number of guests based on attendance
+document.addEventListener('DOMContentLoaded', () => {
+    const attendanceInputs = document.querySelectorAll('input[name="attendance"]');
+    const guestsInput = document.getElementById('guests');
+    const guestsContainer = document.getElementById('guests-container');
+
+    if (attendanceInputs && guestsInput && guestsContainer) {
+        attendanceInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                if (input.value === 'yes') {
+                    guestsContainer.style.display = 'block';
+                    guestsInput.required = true;
+                } else {
+                    guestsContainer.style.display = 'none';
+                    guestsInput.required = false;
+                    guestsInput.value = '0';
+                }
+            });
+        });
     }
 });
 
@@ -746,3 +875,34 @@ function initFormOptimizations() {
         }
     });
 }
+
+function updateCountdown() {
+    const weddingDate = new Date('2025-05-31T14:15:00');
+    const now = new Date();
+    const diff = weddingDate - now;
+
+    if (diff <= 0) {
+        // Wedding day has passed
+        document.querySelectorAll('.countdown-number').forEach(el => {
+            el.textContent = '00';
+        });
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    // Update countdown numbers
+    document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+    document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+}
+
+// Initialize countdown
+document.addEventListener('DOMContentLoaded', () => {
+    updateCountdown(); // Initial update
+    setInterval(updateCountdown, 1000); // Update every second
+});
