@@ -187,7 +187,7 @@ function setLanguage(lang) {
     labels[2].textContent = translations[lang].minutes;
     
     // Update direction buttons
-    document.querySelectorAll('.directions-btn').forEach(btn => {
+    document.querySelectorAll('a.directions-btn, button.directions-btn').forEach(btn => {
         btn.textContent = translations[lang].getDirections;
     });
 
