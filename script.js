@@ -1,16 +1,10 @@
 console.log('Script loaded successfully');
 
-// Remove all previous event listeners and intervals
-window.addEventListener('load', () => {
-    // Clear all existing intervals
+// Cleanup on page unload
+window.addEventListener('unload', () => {
+    // Clear any existing intervals
     for (let i = 1; i < 100; i++) {
         clearInterval(i);
-    }
-    
-    // Remove any existing scripts
-    const oldScript = document.getElementById('countdown-script');
-    if (oldScript) {
-        oldScript.remove();
     }
 });
 
@@ -96,146 +90,136 @@ const translations = {
     }
 };
 
-// Utility function to create touch/click handler
-function createButtonHandler(callback, debounceTime = 300) {
-    let lastClick = 0;
-    let isProcessing = false;
-    
-    return function(event) {
-        // Stop if we're already processing or it's too soon since last click
-        const now = Date.now();
-        if (isProcessing || now - lastClick < debounceTime) {
-            event.preventDefault();
-            return;
-        }
-
-        lastClick = now;
-        isProcessing = true;
-
-        try {
-            // Call the callback and prevent default only if needed
-            const result = callback.call(this, event);
-            if (result !== false) {
-                event.preventDefault();
+// Event handling utilities
+const EventHandlers = {
+    // Debounce function for event handlers
+    debounce(fn, delay = 300) {
+        let timeoutId;
+        let lastRun = 0;
+        
+        return function (...args) {
+            const now = Date.now();
+            
+            if (now - lastRun < delay) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    lastRun = now;
+                    fn.apply(this, args);
+                }, delay);
+                return;
             }
-        } finally {
-            // Always reset processing flag
-            setTimeout(() => {
-                isProcessing = false;
-            }, 100);
+            
+            lastRun = now;
+            fn.apply(this, args);
+        };
+    },
+
+    // Safe event listener addition
+    addListener(element, eventType, handler, options = {}) {
+        if (!element || !eventType || !handler) return;
+        
+        const wrappedHandler = EventHandlers.debounce((e) => {
+            try {
+                handler.call(element, e);
+            } catch (error) {
+                console.error('Event handler error:', error);
+            }
+        });
+        
+        element.addEventListener(eventType, wrappedHandler, options);
+    },
+
+    // Initialize all event listeners
+    initializeEvents() {
+        // Language switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            EventHandlers.addListener(btn, 'click', function(e) {
+                e.preventDefault();
+                if (this.classList.contains('active')) return;
+                
+                // Update language buttons state
+                document.querySelectorAll('.lang-btn').forEach(b => 
+                    b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Set new language
+                setLanguage(this.dataset.lang);
+            });
+        });
+
+        // Map toggles
+        document.querySelectorAll('.map-toggle').forEach(btn => {
+            EventHandlers.addListener(btn, 'click', function(e) {
+                e.preventDefault();
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
+                const mapContainer = this.nextElementSibling;
+                
+                // Update button state
+                this.setAttribute('aria-expanded', !isExpanded);
+                this.textContent = !isExpanded 
+                    ? translations[currentLang].hideMap 
+                    : translations[currentLang].showMap;
+                
+                // Toggle map visibility
+                if (mapContainer) {
+                    mapContainer.style.display = !isExpanded ? 'block' : 'none';
+                    mapContainer.hidden = isExpanded;
+                }
+            });
+        });
+
+        // RSVP form
+        const rsvpForm = document.getElementById('rsvp-form');
+        if (rsvpForm) {
+            EventHandlers.addListener(rsvpForm, 'submit', handleRSVP);
         }
-    };
-}
+
+        // Calendar buttons
+        document.querySelectorAll('.calendar-btn').forEach(btn => {
+            EventHandlers.addListener(btn, 'click', function(e) {
+                e.preventDefault();
+                const calEvent = generateCalendarEvent();
+                if (this.dataset.calendar === 'google') {
+                    addToGoogleCalendar(calEvent);
+                } else if (this.dataset.calendar === 'ical') {
+                    generateICSFile(calEvent);
+                }
+            });
+        });
+
+        // Keyboard navigation
+        EventHandlers.addListener(document, 'keydown', function(e) {
+            const lightbox = document.getElementById('lightbox');
+            if (!lightbox?.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPrev(); break;
+                case 'ArrowRight': showNext(); break;
+            }
+        });
+    }
+};
 
 // Main initialization
 document.addEventListener('DOMContentLoaded', () => {
-    // Language button handling
-    const langButtons = document.querySelectorAll('.lang-btn');
+    console.log('Initializing application...');
     
-    langButtons.forEach(button => {
-        // Remove any existing listeners to prevent duplicates
-        const newButton = removeExistingListeners(button);
-        
-        const handleLanguageChange = createButtonHandler(function(event) {
-            event.stopPropagation();
-            
-            // Remove active class from all buttons
-            langButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Set new language
-            const newLang = this.dataset.lang;
-            setLanguage(newLang);
-            
-            return true; // Allow default button behavior
-        });
-
-        // Add listeners with capture phase
-        newButton.addEventListener('click', handleLanguageChange, { 
-            capture: true 
-        });
-    });
-
-    // Set initial language and active state
+    // Set initial language
     const initialLang = localStorage.getItem('preferredLanguage') || 'sr';
     setLanguage(initialLang);
-    langButtons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.lang === initialLang) {
-            btn.classList.add('active');
-        }
+    
+    // Initialize all event handlers
+    EventHandlers.initializeEvents();
+    
+    // Initialize map containers
+    document.querySelectorAll('.map-container').forEach(container => {
+        container.style.display = 'none';
+        container.hidden = true;
     });
-
-    // Calendar button handling
-    document.querySelectorAll('.calendar-btn').forEach(button => {
-        const newButton = removeExistingListeners(button);
-        
-        const handleCalendarClick = createButtonHandler(function(event) {
-            event.stopPropagation(); // Stop event bubbling
-            
-            const event = generateCalendarEvent();
-            if (this.dataset.calendar === 'google') {
-                addToGoogleCalendar(event);
-            } else if (this.dataset.calendar === 'ical') {
-                generateICSFile(event);
-            }
-            return false; // Don't prevent default as we need link navigation
-        });
-
-        // Add listeners with capture phase to ensure they run first
-        newButton.addEventListener('touchstart', handleCalendarClick, { 
-            passive: false, 
-            capture: true 
-        });
-        newButton.addEventListener('click', handleCalendarClick, { 
-            capture: true 
-        });
-    });
-
-    // Map toggle handling
-    const mapButtons = document.querySelectorAll('.map-toggle');
-    mapButtons.forEach(button => {
-        const newButton = removeExistingListeners(button);
-        
-        const handleMapToggle = createButtonHandler(function(event) {
-            event.stopPropagation(); // Stop event bubbling
-            
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
-            
-            this.setAttribute('aria-expanded', !isExpanded);
-            this.textContent = !isExpanded 
-                ? translations[currentLang].hideMap 
-                : translations[currentLang].showMap;
-            
-            const mapContainer = this.nextElementSibling;
-            if (mapContainer) {
-                mapContainer.classList.toggle('show');
-                mapContainer.style.display = !isExpanded ? 'block' : 'none';
-                mapContainer.hidden = isExpanded;
-            }
-        });
-
-        newButton.addEventListener('touchstart', handleMapToggle, { 
-            passive: false, 
-            capture: true 
-        });
-        newButton.addEventListener('click', handleMapToggle, { 
-            capture: true 
-        });
-    });
-
-    // Set initial language
-    const savedLang = localStorage.getItem('preferredLanguage') || 'sr';
-    setLanguage(savedLang);
-    document.querySelector(`[data-lang="${savedLang}"]`)?.classList.add('active');
-
-    // Initialize other features
-    handleTimelineAnimation();
-    initMapToggles();
-    initGallery();
+    
+    console.log('Application initialized successfully');
 });
 
 function setLanguage(lang) {
@@ -573,66 +557,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function handleRSVP(event) {
     event.preventDefault();
-    console.log('RSVP form submitted'); // Debug log
     
     const form = document.getElementById('rsvp-form');
     const submitButton = form.querySelector('button[type="submit"]');
+    const currentLang = localStorage.getItem('preferredLanguage') || 'sr';
+    
+    // Disable submit button and show loading state
     submitButton.disabled = true;
+    submitButton.style.opacity = '0.7';
     
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        attendance: document.getElementById('attendance').value,
-        numberOfGuests: document.getElementById('guests').value || 0,
-        timestamp: new Date().toISOString()
-    };
-    
-    console.log('Form data:', formData); // Debug log
-
     try {
-        console.log('Attempting to send email...'); // Debug log
-        await emailjs.send(
-            "service_fer518o",
-            "template_092gnfq",
-            {
-                to_email: "mladen.slijepcevic.eestec@gmail.com",
-                from_name: formData.name,
-                from_email: formData.email,
-                attendance: formData.attendance,
-                guests: formData.numberOfGuests,
-                reply_to: formData.email
-            }
-        );
-        console.log('Email sent successfully'); // Debug log
+        const formData = {
+            name: document.getElementById('name').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            attendance: document.getElementById('attendance').value,
+            guests: document.getElementById('guests').value.trim()
+        };
 
-        // Create success message with proper styling
+        // Basic validation
+        if (!formData.name || !formData.email || !formData.attendance) {
+            throw new Error('Please fill in all required fields');
+        }
+
+        // Show success message
         const successMessage = document.createElement('div');
         successMessage.className = 'rsvp-message success';
-        successMessage.style.padding = '20px';
-        successMessage.style.backgroundColor = '#e8f5e9';
-        successMessage.style.color = '#2e7d32';
-        successMessage.style.borderRadius = '8px';
-        successMessage.style.textAlign = 'center';
-        successMessage.style.fontSize = '1.2rem';
-        successMessage.textContent = translations[localStorage.getItem('preferredLanguage') || 'sr'].rsvpSuccess;
+        successMessage.style.cssText = `
+            padding: 20px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        `;
+        successMessage.textContent = translations[currentLang].rsvpSuccess;
         
-        // Replace form with success message
         form.innerHTML = '';
         form.appendChild(successMessage);
 
     } catch (error) {
-        console.error('RSVP Error:', error); // Debug log
         const errorMessage = document.createElement('div');
         errorMessage.className = 'rsvp-message error';
-        errorMessage.style.padding = '20px';
-        errorMessage.style.backgroundColor = '#ffebee';
-        errorMessage.style.color = '#c62828';
-        errorMessage.style.borderRadius = '8px';
-        errorMessage.style.textAlign = 'center';
-        errorMessage.style.marginBottom = '20px';
-        errorMessage.textContent = translations[localStorage.getItem('preferredLanguage') || 'sr'].rsvpError;
+        errorMessage.style.cssText = `
+            padding: 20px;
+            background-color: #ffebee;
+            color: #c62828;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        `;
+        errorMessage.textContent = translations[currentLang].rsvpError;
+        
         form.prepend(errorMessage);
         submitButton.disabled = false;
+        submitButton.style.opacity = '1';
     }
 }
 

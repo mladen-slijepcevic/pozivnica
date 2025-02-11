@@ -5,6 +5,8 @@
     --container-padding: 1rem;
     --section-spacing: 2rem;
     --button-height: 44px; /* Minimum touch target size */
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --button-min-height: 44px;
 }
 
 /* Mobile-first base styles */
@@ -483,16 +485,26 @@ button:hover {
     transition: color 0.3s ease;
     min-height: auto;
     width: auto;
+    pointer-events: auto;
+    touch-action: manipulation;
 }
 
 .lang-btn.active {
     color: #2c3e50;
     font-weight: 600;
+    pointer-events: auto;
 }
 
 .lang-separator {
     color: #ddd;
     margin: 0 4px;
+}
+
+/* Add touch device specific styles */
+@media (hover: none) {
+    .lang-btn {
+        padding: 8px 12px; /* Larger touch target */
+    }
 }
 
 /* Responsive adjustments */
