@@ -162,10 +162,15 @@ section {
 }
 
 /* Story section optimization */
+.story {
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
 .photo-container {
     width: 90%;
     max-width: 500px;
-    margin: 2rem auto;
+    margin: 0 auto;
 }
 
 .main-photo {
@@ -487,7 +492,7 @@ h2 {
 
 .invitation-text {
     text-align: center;
-    margin-top: 2rem;
+    margin: 2rem auto 0;
     font-size: clamp(1rem, 3vw, 1.2rem);
     color: var(--text-color);
     font-style: italic;
