@@ -95,7 +95,7 @@ section.visible {
     position: relative;
     z-index: 2;
     text-align: center;
-    margin-top: 15vh;
+    margin-top: 12vh;  /* Reduced from 15vh */
 }
 
 /* Countdown optimization */
@@ -743,9 +743,10 @@ h2 {
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     color: var(--light-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;  /* Reduced from 1rem */
     letter-spacing: 1px;
     text-transform: none;
+    line-height: 1.2;  /* Added to reduce vertical spacing */
 }
 
 .date {
@@ -753,10 +754,11 @@ h2 {
     font-size: clamp(1rem, 2.5vw, 1.5rem);
     font-weight: 500;
     color: var(--light-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;  /* Reduced from 1rem */
     letter-spacing: 3px;
     text-transform: uppercase;
     opacity: 0.9;
+    line-height: 1.2;  /* Added to reduce vertical spacing */
 }
 
 .date::before,
