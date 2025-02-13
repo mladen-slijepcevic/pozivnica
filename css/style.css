@@ -53,6 +53,14 @@ section {
     margin: 1rem 0;
     width: 100%;
     overflow-x: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Hero Section */
@@ -812,5 +820,103 @@ select {
 @supports (-webkit-touch-callout: none) {
     input, select, textarea {
         font-size: 16px !important;
+    }
+}
+
+/* Add to existing CSS */
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Add floating navigation */
+.floating-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.floating-nav ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+}
+
+.floating-nav a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.floating-nav a:hover {
+    color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+    .floating-nav {
+        bottom: 10px;
+        padding: 10px 15px;
+    }
+    
+    .floating-nav ul {
+        gap: 15px;
+    }
+    
+    .floating-nav a {
+        font-size: 0.8rem;
+    }
+}
+
+/* Add notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left: 4px solid var(--accent-color);
+}
+
+.notification.error {
+    border-left: 4px solid #ff6b6b;
+}
+
+@media (max-width: 768px) {
+    .notification {
+        top: auto;
+        bottom: 80px;
+        left: 20px;
+        right: 20px;
+        transform: translateY(120%);
+    }
+    
+    .notification.show {
+        transform: translateY(0);
     }
 }
