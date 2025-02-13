@@ -71,7 +71,7 @@ section.visible {
     flex-direction: column;
     justify-content: space-between; /* This will push content to top and bottom */
     align-items: center;
-    background: linear-gradient(135deg, #f2f9f1, #ddeedf, #b6cdbd);
+    background: linear-gradient(135deg, #b6cdbd, #5c715e);
     position: relative;
     overflow: hidden;
     color: var(--light-color);
