@@ -71,7 +71,7 @@ section.visible {
     flex-direction: column;
     justify-content: space-between; /* This will push content to top and bottom */
     align-items: center;
-    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+    background: linear-gradient(135deg, #f2f9f1, #ddeedf, #b6cdbd);
     position: relative;
     overflow: hidden;
     color: var(--light-color);
@@ -102,13 +102,13 @@ section.visible {
 .countdown {
     position: relative;
     z-index: 2;
-    margin-bottom: 3rem;
     width: 100%;
     max-width: 600px;
     padding: 0 1rem;
     display: flex;
     justify-content: center;
     gap: 1.5rem;
+    margin-bottom: 2rem; /* Space after countdown */
 }
 
 .countdown-item {
@@ -294,8 +294,8 @@ section.visible {
     padding: 1rem 1.5rem;
     border: none;
     border-radius: 16px;
-    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
-    color: var(--light-color);
+    background: linear-gradient(135deg, #f2f9f1, #ddeedf, #b6cdbd);
+    color: var(--primary-color); /* Changed to primary color for better contrast */
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 1rem;
@@ -306,7 +306,7 @@ section.visible {
     align-items: center;
     justify-content: center;
     gap: 0.8rem;
-    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.2);
+    box-shadow: 0 4px 15px rgba(182, 205, 189, 0.3);
 }
 
 .calendar-btn i {
@@ -315,7 +315,7 @@ section.visible {
 
 .calendar-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+    box-shadow: 0 8px 25px rgba(182, 205, 189, 0.4);
 }
 
 /* Agenda Section Styling */
@@ -875,19 +875,21 @@ select {
 
 .countdown-subtitle {
     color: var(--light-color);
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
     font-weight: 500;
-    opacity: 0.8;
-    margin-top: 1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
     text-align: center;
     position: relative;
     z-index: 2;
+    font-style: italic;
 }
 
 @media (max-width: 768px) {
     .countdown-subtitle {
-        font-size: 0.9rem;
+        font-size: 1.2rem;
         margin-top: 0.8rem;
+        margin-bottom: 1.5rem;
     }
 }
