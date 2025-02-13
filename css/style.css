@@ -872,3 +872,22 @@ select {
         transform: translateY(0);
     }
 }
+
+.countdown-subtitle {
+    color: var(--light-color);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.8;
+    margin-top: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .countdown-subtitle {
+        font-size: 0.9rem;
+        margin-top: 0.8rem;
+    }
+}
