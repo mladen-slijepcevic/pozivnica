@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Wedding</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <section id="hero" class="hero">
+        <h1 class="names">Jovanka & Mladen</h1>
+        <div class="date">31.maj, 2025</div>
+        <div id="countdown" class="countdown">
+            <div class="countdown-item">
+                <span id="days">00</span>
+                <span class="label">data</span>
+            </div>
+            <div class="countdown-item">
+                <span id="sati">00</span>
+                <span class="label">Hours</span>
+            </div>
+            <div class="countdown-item">
+                <span id="minuta">00</span>
+                <span class="label">Minutes</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="story" class="story">
+        <h2>Our Story</h2>
+        <div class="photo-container">
+            <img src="imgs/main-photo.jpg" alt="Sarah and John" class="main-photo">
+        </div>
+        <div class="invitation-text">
+            <p>We invite you to join us in celebrating our special day at these beautiful venues.</p>
+        </div>
+    </section>
+
+    <section id="agenda" class="agenda">
+        <h2>Wedding Day</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time">14:15h</div>
+                <div class="event">
+                    <h3>Crkveno venčanje</h3>
+                    <p>Crkva Svetog Kneza Lazara - Lazarica</p>
+                    <a href="https://goo.gl/maps/your-ceremony-location" class="map-link" target="_blank">
+                        <i class="fas fa-map-marker-alt"></i> View Location
+                    </a>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">16:00h</div>
+                <div class="event">
+                    <h3>Skup svatova</h3>
+                    <p>Verde</p>
+                    <a href="https://goo.gl/maps/your-reception-location" class="map-link" target="_blank">
+                        <i class="fas fa-map-marker-alt"></i> View Location
+                    </a>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">17:30h</div>
+                <div class="event">
+                    <h3>Građansko venčanje</h3>
+                    <p>Verde</p>
+                    <a href="https://goo.gl/maps/your-reception-location" class="map-link" target="_blank">
+                        <i class="fas fa-map-marker-alt"></i> View Location
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rsvp" class="rsvp">
+        <h2>RSVP</h2>
+        <form id="rsvp-form" class="rsvp-form">
+            <div class="form-group">
+                <input type="text" id="name" name="name" required placeholder="Your Name">
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" name="email" required placeholder="Your Email">
+            </div>
+            <div class="form-group">
+                <select id="attending" name="attending" required>
+                    <option value="">Will you be attending?</option>
+                    <option value="yes">Joyfully Accept</option>
+                    <option value="no">Regretfully Decline</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="number" id="guests" name="guests" min="0" max="2" placeholder="Number of Guests">
+            </div>
+            <button type="submit" class="submit-btn">Send RSVP</button>
+        </form>
+    </section>
+
+    <section id="calendar-buttons" class="calendar-section">
+        <h2>Save the Date</h2>
+        <div class="button-container">
+            <button id="google-calendar" class="calendar-btn">
+                <i class="fab fa-google"></i> Add to Google Calendar
+            </button>
+            <button id="apple-calendar" class="calendar-btn">
+                <i class="fab fa-apple"></i> Add to iPhone Calendar
+            </button>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+        <h2>Venue Gallery</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="imgs/img1.jpg" alt="St. Mary's Church Exterior">
+            </div>
+            <div class="gallery-item">
+                <img src="imgs/img2.jpg" alt="St. Mary's Church Interior">
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/emailjs.js"></script>
+    <script src="js/calendar.js"></script>
+</body>
+</html>
