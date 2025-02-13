@@ -12,11 +12,15 @@
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Šaljem...';
 
         const templateParams = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            attending: document.getElementById('attending').value,
-            guests: document.getElementById('guests').value
+            from_name: document.getElementById('name').value,
+            from_email: document.getElementById('email').value,
+            attendance: document.getElementById('attending').value, // Changed from 'attending' to 'attendance'
+            guests: document.getElementById('guests').value,
+            reply_to: document.getElementById('email').value // Added reply_to parameter
         };
+
+        // Log the values to verify they're being captured
+        console.log('Form values:', templateParams);
 
         emailjs.send('service_fer518o', 'template_092gnfq', templateParams)
             .then(function() {
