@@ -56,7 +56,7 @@ section {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
                 url('../assets/images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
@@ -79,7 +79,7 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.2) 100%);
 }
 
 .hero h1 {
@@ -306,8 +306,10 @@ h2 {
     font-family: 'Great Vibes', cursive;
     font-size: 6rem;
     font-weight: 400;
-    color: var(--light-color);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.4);
     margin-bottom: 2rem;
     line-height: 1.2;
     position: relative;
@@ -318,8 +320,10 @@ h2 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.5rem;
     font-weight: 600;
-    color: var(--light-color);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    text-shadow: 
+        1px 1px 3px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(255, 255, 255, 0.4);
     margin-bottom: 3rem;
     letter-spacing: 3px;
     text-transform: uppercase;
