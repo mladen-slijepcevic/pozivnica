@@ -1,22 +1,29 @@
-import { Inter, Cormorant_Garamond } from 'next/font/google'
-import { Providers } from '@/components/Providers'
+import { TranslationProvider } from '@/context/TranslationContext';
+import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
-const cormorant = Cormorant_Garamond({ 
-  subsets: ['latin'],
-  weight: ['400', '600']
-})
+export const metadata = {
+  title: 'Jovanka & Mladen - Wedding Invitation',
+  description: 'Join us in celebrating our special day',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="sr">
-      <body className={`${inter.className} antialiased`}>
-        <Providers>{children}</Providers>
+    <html lang="en">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>
+        <TranslationProvider>
+          {children}
+        </TranslationProvider>
       </body>
     </html>
-  )
+  );
 }

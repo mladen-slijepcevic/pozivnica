@@ -8,7 +8,14 @@ export const i18n = {
       rsvp: {
         title: 'Potvrda dolaska',
         submit: 'Pošalji',
-        // ... more translations
+        submitting: 'Slanje...',
+        success: 'Hvala na potvrdi!',
+        name: 'Ime i prezime',
+        email: 'Email adresa',
+        attending: 'Da li dolazite?',
+        yes: 'Da',
+        no: 'Ne',
+        guests: 'Broj gostiju'
       }
     },
     en: {
@@ -17,7 +24,14 @@ export const i18n = {
       rsvp: {
         title: 'RSVP',
         submit: 'Submit',
-        // ... more translations
+        submitting: 'Submitting...',
+        success: 'Thank you for your response!',
+        name: 'Full name',
+        email: 'Email address',
+        attending: 'Will you attend?',
+        yes: 'Yes',
+        no: 'No',
+        guests: 'Number of guests'
       }
     }
   }

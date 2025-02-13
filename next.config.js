@@ -4,8 +4,18 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/pozivnica',
-  assetPrefix: '/pozivnica/',
+  basePath: process.env.NODE_ENV === 'production' ? '/pozivnica' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/pozivnica/' : '',
+  trailingSlash: true,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        punycode: false,
+      };
+    }
+    return config;
+  },
 }
 
 module.exports = nextConfig

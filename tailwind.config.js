@@ -7,9 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: 'var(--primary)',
+      },
       fontFamily: {
-        cormorant: ['var(--font-cormorant)'],
-        inter: ['var(--font-inter)'],
+        serif: ['Cormorant Garamond', 'serif'],
+        sans: ['Montserrat', 'sans-serif'],
       },
     },
   },
