@@ -54,6 +54,10 @@ section {
 .hero {
     min-height: 100svh; /* Using svh for better mobile viewport handling */
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* This will push content to top and bottom */
+    align-items: center;
     background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
                 url('../assets/images/hero-bg.jpg');
     background-size: cover;
@@ -78,19 +82,20 @@ section {
     margin-bottom: 1rem;
 }
 
+.hero-content {
+    margin-top: 20vh; /* Pushes the title down from the very top */
+}
+
 /* Countdown optimization */
 .countdown {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
+    margin-bottom: 2rem; /* Add some space from bottom */
     width: 100%;
     padding: 0 1rem;
 }
 
 .countdown-item {
-    min-width: 80px;
-    padding: 0.8rem;
+    min-width: 70px; /* Reduced from 80px */
+    padding: 0.6rem; /* Reduced from 0.8rem */
     flex: 0 1 auto;
     background: rgba(255,255,255,0.15);
     border-radius: 8px;
@@ -106,12 +111,12 @@ section {
 }
 
 .countdown-item span:first-child {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem); /* Reduced size */
     font-weight: 600;
 }
 
 .countdown-item .label {
-    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem); /* Reduced size */
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -309,13 +314,13 @@ h2 {
 
 .names {
     font-family: 'Great Vibes', cursive;
-    font-size: clamp(2.5rem, 8vw, 6rem); /* Responsive font size */
+    font-size: clamp(2rem, 6vw, 4.5rem); /* Reduced from 8vw to 6vw */
     font-weight: 400;
     color: #ffffff;
     text-shadow: 
         2px 2px 4px rgba(0, 0, 0, 0.3),
         0 0 20px rgba(255, 255, 255, 0.4);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem; /* Reduced from 2rem */
     line-height: 1.2;
     position: relative;
     z-index: 1;
@@ -323,14 +328,14 @@ h2 {
 
 .date {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-size: clamp(1.2rem, 4vw, 2rem); /* Reduced from 5vw to 4vw */
     font-weight: 600;
     color: #ffffff;
     text-shadow: 
         1px 1px 3px rgba(0, 0, 0, 0.3),
         0 0 15px rgba(255, 255, 255, 0.4);
-    margin-bottom: 3rem;
-    letter-spacing: 3px;
+    margin-bottom: 1rem; /* Reduced from 3rem */
+    letter-spacing: 2px; /* Reduced from 3px */
     text-transform: uppercase;
     position: relative;
 }
@@ -347,11 +352,15 @@ h2 {
 
 /* Add responsive adjustments */
 @media (max-width: 768px) {
+    .hero-content {
+        margin-top: 15vh; /* Slightly less margin on mobile */
+    }
+    
     .names {
-        font-size: 3.5rem;
+        font-size: 2.8rem; /* Specific size for mobile */
     }
     
     .date {
-        font-size: 1.8rem;
+        font-size: 1.4rem; /* Specific size for mobile */
     }
 }
