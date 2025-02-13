@@ -2,12 +2,13 @@
 :root {
     --primary-color: #2D3436;
     --secondary-color: #636E72;
-    --accent-color: #00B894;
+    --accent-color: #5c715e;  /* Updated to match gradient end color */
     --text-color: #2D3436;
     --light-color: #ffffff;
     --bg-color: #F5F6FA;
-    --gradient-1: #74B9FF;
-    --gradient-2: #00B894;
+    --gradient-1: #b6cdbd;    /* Added from gradient start color */
+    --gradient-2: #5c715e;    /* Added from gradient end color */
+    --button-gradient: linear-gradient(135deg, #b6cdbd, #5c715e);
     --spacing-unit: 1rem;
     --transition: all 0.3s ease;
     --spacing-mobile: 0.8rem;
@@ -241,12 +242,12 @@ section.visible {
 .form-group select:focus {
     border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.1);
+    box-shadow: 0 0 0 4px rgba(92, 113, 94, 0.1);
 }
 
 .submit-btn {
     width: 100%;
-    background: var(--accent-color);
+    background: var(--button-gradient);
     color: white;
     padding: 1rem;
     border: none;
@@ -261,7 +262,7 @@ section.visible {
 
 .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 184, 148, 0.2);
+    box-shadow: 0 10px 20px rgba(92, 113, 94, 0.2);
 }
 
 /* Calendar Buttons optimization */
@@ -294,7 +295,7 @@ section.visible {
     padding: 1rem 1.5rem;
     border: none;
     border-radius: 16px;
-    background: linear-gradient(135deg, #f2f9f1, #ddeedf, #b6cdbd);
+    background: var(--button-gradient);
     color: var(--primary-color); /* Changed to primary color for better contrast */
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -358,7 +359,7 @@ section.visible {
 
 .time {
     display: inline-block;
-    background: var(--accent-color);
+    background: var(--button-gradient);
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 8px;
@@ -392,13 +393,13 @@ section.visible {
     font-size: 0.9rem;
     font-weight: 500;
     padding: 0.5rem 1rem;
-    background: rgba(0, 184, 148, 0.1);
+    background: rgba(92, 113, 94, 0.1);
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .map-link:hover {
-    background: rgba(0, 184, 148, 0.2);
+    background: rgba(92, 113, 94, 0.2);
     transform: translateX(4px);
 }
 
