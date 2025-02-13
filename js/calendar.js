@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const event = {
-        title: 'Jovanka & Mladen Wedding',
+        title: 'Venčanje Jovanke i Mladena',
         description: 'Pozivamo Vas da prisustujete na našem venčanju.\n\n' +
                     '14:15 - Crkveno venčanje (Crkva Svetog Kneza Lazara - Lazarica)\n' +
                     '16:00 - Skup svatova (Restoran Verde)\n' +
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = `data:text/calendar;charset=utf-8,BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
-URL:http://yourweddingwebsite.com
+URL:https://mladen-slijepcevic.github.io/pozivnica/
 DTSTART:${event.start}
 DTEND:${event.end}
 SUMMARY:${event.title}
@@ -37,7 +37,7 @@ END:VCALENDAR`;
 
         const link = document.createElement('a');
         link.href = encodeURI(url);
-        link.setAttribute('download', 'wedding-calendar.ics');
+        link.setAttribute('download', 'vencanje-jovanka-mladen.ics');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
