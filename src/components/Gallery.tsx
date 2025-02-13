@@ -2,10 +2,16 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 
+interface GalleryImage {
+  id: number
+  src: string
+  alt: string
+}
+
 export const Gallery = () => {
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   
-  const images = [
+  const images: GalleryImage[] = [
     { id: 1, src: '/images/gallery/1.jpg', alt: 'Jovanka and Mladen' },
     // ... more images
   ]
