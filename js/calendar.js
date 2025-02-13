@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const event = {
         title: 'Venčanje Jovanke i Mladena',
-        description: 'Pozivamo Vas da prisustujete na našem venčanju.\n\n' +
+        description: 'Pozivamo Vas da prisustujete našem venčanju.\n\n' +
                     '14:15 - Crkveno venčanje (Crkva Svetog Kneza Lazara - Lazarica)\n' +
                     '16:00 - Skup svatova (Restoran Verde)\n' +
                     '17:30 - Građansko venčanje (Restoran Verde)',

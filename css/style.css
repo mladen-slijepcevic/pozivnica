@@ -107,9 +107,17 @@ section.visible {
     max-width: 600px;
     padding: 0 1rem;
     display: flex;
+    flex-direction: column;  /* Changed to column to stack elements vertically */
+    align-items: center;     /* Center items horizontally */
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.countdown-items {
+    display: flex;
     justify-content: center;
     gap: 1.5rem;
-    margin-bottom: 2rem; /* Space after countdown */
+    width: 100%;
 }
 
 .countdown-item {
@@ -170,6 +178,20 @@ section.visible {
 
 .countdown-item:nth-child(3) {
     animation-delay: 0.4s;
+}
+
+/* Countdown subtitle */
+.countdown-subtitle {
+    color: var(--light-color);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;  /* Reduced margin to bring closer to timer */
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
 }
 
 /* Story section optimization */
@@ -728,15 +750,27 @@ h2 {
     font-weight: 700;
 }
 
-.invitation-text {
-    text-align: center;
-    margin: 2rem auto 0;
-    font-size: clamp(1rem, 3vw, 1.2rem);
-    color: var(--text-color);
-    font-style: italic;
-    padding: 0 1rem;
+/* Add new hero-invitation style */
+.hero-invitation {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--light-color);
+    margin-bottom: 2rem;
     max-width: 600px;
-    line-height: 1.8;
+    text-align: center;
+    font-style: italic;
+    line-height: 1.6;
+    opacity: 0.9;
+    padding: 0 1rem;
+}
+
+/* Add mobile optimization for hero-invitation */
+@media (max-width: 768px) {
+    .hero-invitation {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+    }
 }
 
 .names {
@@ -744,10 +778,10 @@ h2 {
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     color: var(--light-color);
-    margin-bottom: 0.5rem;  /* Reduced from 1rem */
+    margin-bottom: 0.5rem;
     letter-spacing: 1px;
     text-transform: none;
-    line-height: 1.2;  /* Added to reduce vertical spacing */
+    line-height: 1.2;
 }
 
 .date {
@@ -755,11 +789,11 @@ h2 {
     font-size: clamp(1rem, 2.5vw, 1.5rem);
     font-weight: 500;
     color: var(--light-color);
-    margin-bottom: 0.5rem;  /* Reduced from 1rem */
+    margin-bottom: 1rem;
     letter-spacing: 3px;
     text-transform: uppercase;
     opacity: 0.9;
-    line-height: 1.2;  /* Added to reduce vertical spacing */
+    line-height: 1.2;
 }
 
 .date::before,
@@ -882,7 +916,7 @@ select {
     font-size: 1.4rem;
     font-weight: 500;
     opacity: 0.9;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;  /* Reduced margin to bring closer to timer */
     text-align: center;
     position: relative;
     z-index: 2;
@@ -892,7 +926,6 @@ select {
 @media (max-width: 768px) {
     .countdown-subtitle {
         font-size: 1.2rem;
-        margin-top: 0.8rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.3rem;  /* Further reduced for mobile */
     }
 }
