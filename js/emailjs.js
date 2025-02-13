@@ -25,7 +25,7 @@
             })
             .finally(function() {
                 submitButton.disabled = false;
-                submitButton.textContent = 'Send RSVP';
+                submitButton.textContent = 'Pošalji odgovor';
             });
     });
 })();
