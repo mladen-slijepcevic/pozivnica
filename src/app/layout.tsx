@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'Jovanka & Mladen - Wedding Invitation',
-  description: 'Join us in celebrating our special day',
+  description: 'Wedding invitation for Jovanka and Mladen',
 };
 
 export default function RootLayout({
@@ -13,12 +13,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body>
         <TranslationProvider>
           {children}
