@@ -12,10 +12,10 @@
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Šaljem...';
 
         const templateParams = {
-            name: this.name.value,
-            email: this.email.value,
-            attending: this.attending.value,
-            guests: this.guests.value
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            attending: document.getElementById('attending').value,
+            guests: document.getElementById('guests').value
         };
 
         emailjs.send('service_fer518o', 'template_092gnfq', templateParams)
