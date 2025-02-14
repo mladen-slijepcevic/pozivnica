@@ -11,8 +11,27 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     document.getElementById('google-calendar').addEventListener('click', function() {
-        // Google Calendar - adding reminder through URL parameters
-        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.end}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}&reminders=ALERT,10080`;  // 10080 minutes = 7 days
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        let url;
+        
+        if (isAndroid) {
+            // Android intent scheme
+            url = `content://com.android.calendar/time/${event.start}`;
+            url = `intent://calendar/view?title=${encodeURIComponent(event.title)}`
+                + `&dates=${event.start}/${event.end}`
+                + `&details=${encodeURIComponent(event.description)}`
+                + `&location=${encodeURIComponent(event.location)}`
+                + `&reminders=ALERT,10080`
+                + '#Intent;scheme=http;package=com.google.android.calendar;end';
+        } else {
+            // Web URL for other platforms
+            url = `https://calendar.google.com/calendar/render?action=TEMPLATE`
+                + `&text=${encodeURIComponent(event.title)}`
+                + `&dates=${event.start}/${event.end}`
+                + `&details=${encodeURIComponent(event.description)}`
+                + `&location=${encodeURIComponent(event.location)}`
+                + `&reminders=ALERT,10080`;
+        }
         window.open(url, '_blank');
     });
 
