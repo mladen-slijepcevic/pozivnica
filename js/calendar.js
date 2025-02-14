@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('apple-calendar').addEventListener('click', function() {
         // Format description according to iCalendar spec
         const formatICSText = (text) => {
-            return text.replace(/\n/g, '\\n')  // Replace newlines with literal '\n'
-                      .replace(/[<>]/g, '')    // Remove < and > characters
-                      .replace(/;/g, '\\;')    // Escape semicolons
-                      .replace(/,/g, '\\,');   // Escape commas
+            return text.replace(/\n/g, '\\n')
+                      .replace(/[<>]/g, '')
+                      .replace(/;/g, '\\;')
+                      .replace(/,/g, '\\,');
         };
 
         const icsContent = [
@@ -32,9 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
             'CALSCALE:GREGORIAN',
             'METHOD:PUBLISH',
             'BEGIN:VEVENT',
+            `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+            `UID:${Date.now()}@wedding.event`,
+            `DTSTART;TZID=Europe/Belgrade:${event.start}`,
+            `DTEND;TZID=Europe/Belgrade:${event.end}`,
             `URL:https://mladen-slijepcevic.github.io/pozivnica/`,
-            `DTSTART:${event.start}`,
-            `DTEND:${event.end}`,
             `SUMMARY:${formatICSText(event.title)}`,
             `DESCRIPTION:${formatICSText(event.description)}`,
             `LOCATION:${formatICSText(event.location)}`,
@@ -47,14 +49,18 @@ document.addEventListener('DOMContentLoaded', function() {
             'END:VCALENDAR'
         ].join('\r\n');
 
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'vencanje-jovanka-mladen.ics');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            window.location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent);
+        } else {
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'vencanje-jovanka-mladen.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
     });
 });
