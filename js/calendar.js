@@ -17,29 +17,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('apple-calendar').addEventListener('click', function() {
-        // Apple Calendar (iCal format) with alarm
-        const url = `data:text/calendar;charset=utf-8,BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-URL:https://mladen-slijepcevic.github.io/pozivnica/
-DTSTART:${event.start}
-DTEND:${event.end}
-SUMMARY:${event.title}
-DESCRIPTION:${event.description}
-LOCATION:${event.location}
-BEGIN:VALARM
-TRIGGER:-P7D
-ACTION:DISPLAY
-DESCRIPTION:Reminder: ${event.title}
-END:VALARM
-END:VEVENT
-END:VCALENDAR`;
+        // Format description according to iCalendar spec
+        const formatICSText = (text) => {
+            return text.replace(/\n/g, '\\n')  // Replace newlines with literal '\n'
+                      .replace(/[<>]/g, '')    // Remove < and > characters
+                      .replace(/;/g, '\\;')    // Escape semicolons
+                      .replace(/,/g, '\\,');   // Escape commas
+        };
 
+        const icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Jovanka i Mladen Wedding//Wedding Invitation//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            `URL:https://mladen-slijepcevic.github.io/pozivnica/`,
+            `DTSTART:${event.start}`,
+            `DTEND:${event.end}`,
+            `SUMMARY:${formatICSText(event.title)}`,
+            `DESCRIPTION:${formatICSText(event.description)}`,
+            `LOCATION:${formatICSText(event.location)}`,
+            'BEGIN:VALARM',
+            'TRIGGER:-P7D',
+            'ACTION:DISPLAY',
+            `DESCRIPTION:Reminder: ${formatICSText(event.title)}`,
+            'END:VALARM',
+            'END:VEVENT',
+            'END:VCALENDAR'
+        ].join('\r\n');
+
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = encodeURI(url);
+        link.href = url;
         link.setAttribute('download', 'vencanje-jovanka-mladen.ics');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
     });
 });
