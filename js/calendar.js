@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 + `&text=${encodeURIComponent(event.title)}`
                 + `&dates=${startDateUTC}/${endDateUTC}`
                 + `&details=${encodeURIComponent(event.description)}`
-                + `&location=${encodeURIComponent(event.location)}`;
+                + `&location=${encodeURIComponent(event.location)}`
+                + `&reminders=ALERT,10080`;
         } else {
             // Web URL for other platforms
             url = `https://calendar.google.com/calendar/render?action=TEMPLATE`
