@@ -15,21 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
         let url;
         
         if (isAndroid) {
-            // Direct Android calendar intent
-            url = `content://com.android.calendar/events`;
-            const startDate = new Date('2025-05-31T14:15:00');
-            const endDate = new Date('2025-05-31T23:59:00');
-            
-            url = `intent:#Intent;`
-                + `action=android.intent.action.INSERT;`
-                + `type=vnd.android.cursor.item/event;`
-                + `S.title=${encodeURIComponent(event.title)};`
-                + `S.description=${encodeURIComponent(event.description)};`
-                + `S.eventLocation=${encodeURIComponent(event.location)};`
-                + `l.beginTime=${startDate.getTime()};`
-                + `l.endTime=${endDate.getTime()};`
-                + `B.allDay=false;`
-                + `end`;
+            const startDateUTC = new Date('2025-05-31T14:15:00').toISOString().replace(/[-:.]/g, '').slice(0, -1) + 'Z';
+            const endDateUTC = new Date('2025-05-31T23:59:00').toISOString().replace(/[-:.]/g, '').slice(0, -1) + 'Z';
+            url = `https://calendar.google.com/calendar/render?action=TEMPLATE`
+                + `&text=${encodeURIComponent(event.title)}`
+                + `&dates=${startDateUTC}/${endDateUTC}`
+                + `&details=${encodeURIComponent(event.description)}`
+                + `&location=${encodeURIComponent(event.location)}`;
         } else {
             // Web URL for other platforms
             url = `https://calendar.google.com/calendar/render?action=TEMPLATE`
