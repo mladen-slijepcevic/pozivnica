@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
         description: 'Pozivamo Vas da prisustujete našem venčanju.\n\n' +
                     '14:15 - Crkveno venčanje (Crkva Svetog Kneza Lazara - Lazarica)\n' +
                     '16:00 - Skup svatova (Restoran Verde)\n' +
-                    '17:30 - Građansko venčanje (Restoran Verde)',
+                    '16:45 - Građansko venčanje (Restoran Verde)',
         location: 'Crkva Svetog Kneza Lazara - Lazarica',
         start: '20250531T141500',
         end: '20250531T235900'  // Assuming the event ends at midnight
